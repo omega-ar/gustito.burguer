@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hacer Pedido - El Gustito Hamburguesas</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/pedidos.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="logo">
+        <h1>El Gustito <span class="burger-icon">🍔</span></h1>
+        <p>Hacer tu pedido</p>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Volver al Inicio</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="pedido-main">
+    <div class="container">
+      <h1 class="section-title">Realiza tu Pedido</h1>
+      
+      <div class="pedido-container">
+        <div class="form-container">
+          <form id="formPedido">
+            <div class="form-group">
+              <label for="nombre">Nombre completo *</label>
+              <input type="text" id="nombre" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="direccion">Dirección de entrega *</label>
+              <input type="text" id="direccion" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="telefono">Teléfono *</label>
+              <input type="tel" id="telefono" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="notas">Notas adicionales (opcional)</label>
+              <textarea id="notas" rows="3" placeholder="Ej: Sin cebolla, punto de cocción de la carne, etc."></textarea>
+            </div>
+            
+            <fieldset class="productos-fieldset">
+              <legend>Selecciona tus productos</legend>
+              
+              <div class="productos-lista" id="listaProductos">
+              </div>
+              
+              <div class="total-pedido">
+                <strong>Total: $<span id="totalPedido">0</span></strong>
+              </div>
+            </fieldset>
+            
+            <div class="form-group">
+              <label for="metodoPago">Método de Pago *</label>
+              <select id="metodoPago" required>
+                <option value="">Selecciona un método de pago</option>
+                <option value="efectivo">Efectivo al recibir</option>
+                <option value="transferencia">Transferencia (Mercado Pago)</option>
+              </select>
+            </div>
+
+            <div class="form-buttons">
+              <button type="submit" class="btn-confirmar">
+                <i class="fab fa-whatsapp"></i> Enviar por WhatsApp
+              </button>
+            </div>
+          </form>
+        </div>
+        
+        <div class="resumen-pedido">
+          <h3>Resumen de tu pedido</h3>
+          <div class="resumen-productos" id="resumenProductos">
+          </div>
+          <div class="resumen-total">
+            <strong>Total: $<span id="resumenTotal">0</span></strong>
+          </div>
+          <div class="info-entrega">
+            <h4>Información de entrega</h4>
+            <p><i class="fas fa-clock"></i> Tiempo estimado: 30-45 min</p>
+            <p><i class="fas fa-truck"></i> Solo delivery - Almagro, Boedo</p>
+            <p><i class="fas fa-phone"></i> Ante cualquier duda: 11 2275-0551</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-info">
+          <h3>El Gustito <span class="burger-icon">🍔</span></h3>
+          <p>Hamburguesas artesanales a domicilio</p>
+          <div class="social-links">
+            <a href="https://instagram.com/elgustitohamburguesa" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-whatsapp"></i></a>
+          </div>
+        </div>
+        
+        <div class="footer-contact">
+          <h4>Contacto</h4>
+          <p><i class="fas fa-phone"></i> <a href="tel:+541122750551">11 2275-0551</a></p>
+          <p><i class="fas fa-map-marker-alt"></i> Sanchez de Loria 633</p>
+          <p><i class="fas fa-truck"></i> <strong>Solo Delivery</strong> - Zona Almagro, Boedo</p>
+        </div>
+        
+        <div class="footer-hours">
+          <h4>Horarios</h4>
+          <p>Martes a Viernes: 16:00 - 23:50</p>
+          <p>Sábados, Domingos y Feriados: 18:00 - 23:50</p>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p class="copyright">© 2024 El Gustito Hamburguesas. Todos los derechos reservados / OMEGA.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div id="modalConfirmacion" class="modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <div class="modal-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h3>¡Pedido Confirmado!</h3>
+      <p>Tu pedido ha sido recibido y está siendo preparado.</p>
+      <p>Te contactaremos pronto para confirmar la entrega.</p>
+      <button id="btnCerrarModal" class="btn-primary">Aceptar</button>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="javascript/pedidos.js"></script>
+</body>
+</html>

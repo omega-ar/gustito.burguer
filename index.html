@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Gustito - Hamburguesas Artesanales</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="logo">
+        <h1>El Gustito <span class="burger-icon">🍔</span></h1>
+        <p>Hamburguesas artesanales a domicilio</p>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#inicio">Inicio</a></li>
+          <li><a href="#menu">Menú</a></li>
+          <li><a href="#nosotros">Nosotros</a></li>
+          <li><a href="pedidos.html" class="btn-pedido">Hacer Pedido</a></li>
+        </ul>
+      </nav>
+      <div class="mobile-menu-toggle">
+        <i class="fas fa-bars"></i>
+      </div>
+    </div>
+  </header>
+
+  <section id="inicio" class="hero">
+    <div class="hero-background"></div>
+    <div class="hero-content">
+      <h2>Las Mejores Hamburguesas de Almagro y Boedo</h2>
+      <p>Ingredientes frescos, preparación artesanal y el sabor que te encanta</p>
+      <div class="hero-buttons">
+        <a href="#menu" class="btn-primary">Ver Menú</a>
+        <a href="pedidos.html" class="btn-secondary">Pedir Ahora</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="menu" class="menu-section">
+    <div class="container">
+      <h2 class="section-title">Nuestras Hamburguesas</h2>
+      <p class="section-subtitle">Todas incluyen papas fritas</p>
+      
+      <div class="menu-categories">
+        <button class="category-btn active" data-category="clasicas">Gustitos Simple Clásico</button>
+        <button class="category-btn" data-category="especiales">Gustito Especiales </button>
+        <button class="category-btn" data-category="triples">Gustito Triples</button>
+        <button class="category-btn" data-category="acompanamientos">Acompañamientos</button>
+      </div>
+      
+      <div class="menu-grid">
+        <div class="producto" data-category="clasicas">
+          <div class="producto-img">
+            <img src="img/G_SClasica.jpg" alt="Gustito Clásico">
+            <div class="producto-overlay">
+              <span class="precio">$9.000</span>
+            </div>
+          </div>
+          <div class="producto-info">
+            <h3>Gustito Clásico</h3>
+            <p>1 medallón de carne de 100gr, doble cheddar, pan de papa con semillas, lechuga y tomate. + fritas.</p>
+            <button class="btn-agregar" data-producto="Gustito Clásico" data-precio="9000">Agregar al Pedido</button>
+          </div>
+        </div>
+        
+        <div class="producto" data-category="clasicas">
+          <div class="producto-img">
+            <img src="img/G_SChef.jpg" alt="Gustito del Chef">
+            <div class="producto-overlay">
+              <span class="precio">$9.000</span>
+            </div>
+          </div>
+          <div class="producto-info">
+            <h3>Gustito del Chef</h3>
+            <p>1 medallón de carne de 100gr, doble cheddar, pan de papa con semillas, cebolla picada y mostaza. + fritas.</p>
+            <button class="btn-agregar" data-producto="Gustito del Chef" data-precio="9000">Agregar al Pedido</button>
+          </div>
+        </div>
+        
+        <div class="producto" data-category="clasicas">
+          <div class="producto-img">
+            <img src="img/G_SAhumada.jpg" alt="Gustito Ahumada">
+            <div class="producto-overlay">
+              <span class="precio">$9.000</span>
+            </div>
+          </div>
+          <div class="producto-info">
+            <h3>Gustito Ahumada</h3>
+            <p>1 medallón de carne de 100gr, doble cheddar, pan de papa con semillas, salsa a base de mayonesa con sabor a panceta ahumada. + fritas.</p>
+            <button class="btn-agregar" data-producto="Gustito Ahumada" data-precio="9000">Agregar al Pedido</button>
+          </div>
+        </div>
+
+        <div class="producto" data-category="especiales">
+          <div class="producto-img">
+            <img src="img/G_Cheese.jpg" alt="Cheeseburger">
+            <div class="producto-overlay">
+              <span class="precio">$10.000</span>
+            </div>
+          </div>
+          <div class="producto-info">
+            <h3>Cheeserburger</h3>
+            <p>2 medallones de carne de 100 gr c/u, pan de papa con semillas, triple cheddar. + fritas.</p>
+            <button class="btn-agregar" data-producto="Cheeseburger" data-precio="10000">Agregar al Pedido</button>
+          </div>
+        </div>
+        
+        <div class="producto" data-category="especiales">
+          <div class="producto-img">
+            <img src="img/G_Onion.jpg" alt="Onion">
+            <div class="producto-overlay">
+              <span class="precio">$11.000</span>
+            </div>
+          </div>
+          <div class="producto-info">
+            <h3>Gustito Onion</h3>
+            <p>2 medallones de carne de 100 gr c/u, pan de papa con semillas, triple cheddar, cebolla a la plancha. + fritas.</p>
+            <button class="btn-agregar" data-producto="Gustito Onion" data-precio="11000">Agregar al Pedido</button>
+          </div>
+        </div>
+        
+        <div class="producto" data-category="especiales">
+          <div class="producto-img">
+            <img src="img/G_Huevo.jpg" alt="Gustito Huevo">
+            <div class="producto-overlay">
+              <span class="precio">$11.000</span>
+            </div>
+          </div>
+          <div class="producto-info">
+            <h3>Gustito con Huevo</h3>
+            <p>2 medallones de carne de 100 gr c/u, pan de papa con semillas, triple cheddar, huevo a la plancha. + fritas.</p>
+            <button class="btn-agregar" data-producto="Gustito con Huevo" data-precio="11000">Agregar al Pedido</button>
+          </div>
+        </div>
+
+        <div class="producto" data-category="especiales">
+          <div class="producto-img">
+            <img src="img/G_BBQ.jpg" alt="Gustito BBQ">
+            <div class="producto-overlay">
+              <span class="precio">$12.000</span>
+            </div>
+          </div>
+          <div class="producto-info">
+            <h3>Gustito BBQ</h3>
+            <p>2 medallones de carne de 100 gr c/u, pan de papa con semillas, triple cheddar, salsa BBQ y panceta. + fritas.</p>
+            <button class="btn-agregar" data-producto="Gustito BBQ" data-precio="12000">Agregar al Pedido</button>
+          </div>
+        </div>
+
+        <div class="producto" data-category="especiales">
+          <div class="producto-img">
+            <img src="img/G_Ranch.jpg" alt="Gustito Ranch">
+            <div class="producto-overlay">
+              <span class="precio">$12.000</span>
+            </div>
+          </div>
+          <div class="producto-info">
+            <h3>Gustito Ranch</h3>
+            <p>2 medallones de carne de 100 gr c/u, pan de papa con semillas, triple cheddar, panceta y salsa Ranch.+ fritas.</p>
+            <button class="btn-agregar" data-producto="Gustito Ranch" data-precio="12000">Agregar al Pedido</button>
+          </div>
+        </div>
+
+        <div class="producto" data-category="especiales">
+          <div class="producto-img">
+            <img src="img/G_Americana.jpg" alt="Gustito Americana">
+            <div class="producto-overlay">
+              <span class="precio">$13.000</span>
+            </div>
+          </div>
+          <div class="producto-info">
+            <h3>Americana</h3>
+            <p>2 medallones de carne de 100 gr c/u, pan de papa con semillas, triple cheddar, panceta, y pepinillos. + fritas.</p>
+            <button class="btn-agregar" data-producto="Americana" data-precio="13000">Agregar al Pedido</button>
+          </div>
+        </div>
+
+        <div class="producto" data-category="especiales">
+          <div class="producto-img">
+            <img src="img/G_Picante1.jpg" alt="Gustito Picante">
+            <div class="producto-overlay">
+              <span class="precio">$13.000</span>
+            </div>
+          </div>
+          <div class="producto-info">
+            <h3>Gustito Picante</h3>
+            <p>2 medallones de carne de 100 gr c/u, pan de papa con semillas, triple cheddar, panceta, salsa alioli y Jalapeños. + fritas.</p>
+            <button class="btn-agregar" data-producto="Gustito Picante" data-precio="13000">Agregar al Pedido</button>
+          </div>
+        </div>
+
+        <div class="producto" data-category="especiales">
+          <div class="producto-img">
+            <img src="img/G_Criolla.jpg" alt="Gustito Criolla">
+            <div class="producto-overlay">
+              <span class="precio">$13.000</span>
+            </div>
+          </div>
+          <div class="producto-info">
+            <h3>Gustito Criolla</h3>
+            <p>2 medallones de carne de 100 gr c/u, pan de papa con semillas, triple cheddar, panceta y salsa criolla. + fritas.</p>
+            <button class="btn-agregar" data-producto="Gustito Criolla" data-precio="13000">Agregar al Pedido</button>
+          </div>
+        </div>
+
+        <div class="producto" data-category="triples">
+          <div class="producto-img">
+            <img src="img/G_TripleCheese.jpg" alt="Especial Cheese">
+            <div class="producto-overlay">
+              <span class="precio">$13.000</span>
+            </div>
+          </div>
+          <div class="producto-info">
+            <h3>Especial Cheese</h3>
+            <p>3 medallones de carne de 100 gr c/u, pan de papa con semillas, cuádruple cheddar. + fritas.</p>
+            <button class="btn-agregar" data-producto="Especial Cheese" data-precio="13000">Agregar al Pedido</button>
+          </div>
+        </div>
+        
+        <div class="producto" data-category="triples">
+          <div class="producto-img">
+            <img src="img/G_TripleBBQ.jpg" alt="Especial BBQ">
+            <div class="producto-overlay">
+              <span class="precio">$14.000</span>
+            </div>
+          </div>
+          <div class="producto-info">
+            <h3>Especial BBQ</h3>
+            <p>3 medallones de carne de 100 gr c/u, pan de papa con semillas, cuádruple cheddar, salsa BBQ y panceta. + fritas..</p>
+            <button class="btn-agregar" data-producto="Especial BBQ" data-precio="14000">Agregar al Pedido</button>
+          </div>
+        </div>
+
+        <div class="producto" data-category="triples">
+          <div class="producto-img">
+            <img src="img/G_TripleRanch.jpg" alt="Especial Ranch">
+            <div class="producto-overlay">
+              <span class="precio">$14.000</span>
+            </div>
+          </div>
+          <div class="producto-info">
+            <h3>Especial Ranch</h3>
+            <p>3 medallones de carne de 100 gr c/u, pan de papa con semillas, cuádruple cheddar, salsa Ranch y panceta. + fritas..</p>
+            <button class="btn-agregar" data-producto="Especial Ranch" data-precio="14000">Agregar al Pedido</button>
+          </div>
+        </div>
+
+        <div class="producto" data-category="triples">
+          <div class="producto-img">
+            <img src="img/G_TripleAmericana.jpg" alt="Especial Americana">
+            <div class="producto-overlay">
+              <span class="precio">$15.000</span>
+            </div>
+          </div>
+          <div class="producto-info">
+            <h3>Especial Americana</h3>
+            <p>3 medallones de carne de 100 gr c/u, pan de papa con semillas, cuádruple cheddar, panceta y pepinillos. + fritas..</p>
+            <button class="btn-agregar" data-producto="Especial Americana" data-precio="15000">Agregar al Pedido</button>
+          </div>
+        </div>
+
+        <div class="producto" data-category="triples">
+          <div class="producto-img">
+            <img src="img/G_TriplePicante1.jpg" alt="Especial Picante">
+            <div class="producto-overlay">
+              <span class="precio">$15.000</span>
+            </div>
+          </div>
+          <div class="producto-info">
+            <h3>Especial Picante</h3>
+            <p>3 medallones de carne de 100 gr c/u, pan de papa con semillas, cuádruple cheddar, salsa alioli, panceta y Jalapeños. + fritas..</p>
+            <button class="btn-agregar" data-producto="Especial Picante" data-precio="15000">Agregar al Pedido</button>
+          </div>
+        </div>
+        <!--
+        <div class="producto" data-category="triples">
+          <div class="producto-img">
+            <img src="img/G_T" alt="Especial Criolla">
+            <div class="producto-overlay">
+              <span class="precio">$15.000</span>
+            </div>
+          </div>
+          <div class="producto-info">
+            <h3>Especial Criolla</h3>
+            <p>3 medallones de carne de 100 gr c/u, pan de papa con semillas, cuádruple cheddar, salsa criolla y panceta. + fritas..</p>
+            <button class="btn-agregar" data-producto="Especial Criolla" data-precio="15000">Agregar al Pedido</button>
+          </div>
+        </div>
+        -->
+        <div class="producto" data-category="acompanamientos">
+          <div class="producto-img">
+            <img src="img/Papas_Cheddar.jpg" alt="Papas con Cheddar">
+            <div class="producto-overlay">
+              <span class="precio">$8.000</span>
+            </div>
+          </div>
+          <div class="producto-info">
+            <h3>Papas con Cheddar</h3>
+            <p>400 gr de papas con cheddar derretido y panceta en cuadritos.</p>
+            <button class="btn-agregar" data-producto="Papas con Cheddar" data-precio="8000">Agregar al Pedido</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="menu-cta">
+        <a href="pedidos.html" class="btn-pedido-grande">Hacer Pedido <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="nosotros" class="about-section">
+    <div class="container">
+      <div class="about-content">
+        <div class="about-text">
+          <h2 class="section-title">Sobre El Gustito</h2>
+          <p>En El Gustito nos apasiona crear las mejores hamburguesas artesanales. Utilizamos ingredientes de primera calidad, pan de papa con semillas, nuestras salsas secretas para ofrecerte una experiencia única.</p>
+          <p>Nuestro compromiso es llevar hasta tu casa el auténtico sabor de una hamburguesa gourmet, preparada con dedicación y el toque especial que nos caracteriza.</p>
+          <div class="about-features">
+            <div class="feature">
+              <i class="fas fa-leaf"></i>
+              <span>Ingredientes Frescos</span>
+            </div>
+            <div class="feature">
+              <i class="fas fa-utensils"></i>
+              <span>Preparación Artesanal</span>
+            </div>
+            <div class="feature">
+              <i class="fas fa-shipping-fast"></i>
+              <span>Delivery Rápido</span>
+            </div>
+          </div>
+        </div>
+        <div class="about-image">
+          <img src="img/Gustito.1.png" alt="El Gustito Hamburguesas">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-info">
+          <h3>El Gustito <span class="burger-icon">🍔</span></h3>
+          <p>Hamburguesas artesanales a domicilio</p>
+          <div class="social-links">
+            <a href="https://instagram.com/elgustitohamburguesa" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.facebook.com/elgustitohamburguesa/"><i class="fab fa-facebook"></i></a>
+            <a href="https://wa.me/5491122750551"><i class="fab fa-whatsapp"></i></a>
+          </div>
+        </div>
+        
+        <div class="footer-contact">
+          <h4>Contacto</h4>
+          <p><i class="fas fa-phone"></i> <a href="tel:+541122750551">11 2275-0551</a></p>
+          <p><i class="fas fa-map-marker-alt"></i> Sanchez de Loria 633</p>
+          <p><i class="fas fa-truck"></i> <strong>Solo Delivery</strong> - Almagro, Boedo</p>
+        </div>
+        
+        <div class="footer-hours">
+          <h4>Horarios</h4>
+          <p>Martes a Viernes: 16:00 - 23:50</p>
+          <p>Sábados, Domingos y Feriados: 18:00 - 23:50</p>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p class="copyright">© 2024 El Gustito Hamburguesas. Todos los derechos reservados / OMEGA.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="cart-floating">
+    <div class="cart-icon">
+      <i class="fas fa-shopping-cart"></i>
+      <span class="cart-count">0</span>
+    </div>
+    <div class="cart-preview">
+      <h4>Tu Pedido</h4>
+      <div class="cart-items">
+      </div>
+      <div class="cart-total">
+        <span>Total: $<span id="preview-total">0</span></span>
+      </div>
+      <a href="pedidos.html" class="btn-pedido">Continuar Pedido</a>
+    </div>
+  </div>
+  
+  <script src="config.js"></script>
+  <script src="./javascript/main.js"></script>
+</body>
+</html>
