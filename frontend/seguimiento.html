@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seguimiento de tu Pedido - El Gustito Burger</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/pedidos.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .tracking-page {
+      padding: 3rem 0;
+      background-color: var(--light-color);
+      min-height: calc(100vh - 200px);
+      transition: background-color 0.3s;
+    }
+    
+    body.dark-mode .tracking-page {
+      background-color: #121212;
+    }
+
+    .tracking-card {
+      background: white;
+      border-radius: 24px;
+      padding: 2.5rem;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+      margin-bottom: 2rem;
+      transition: all 0.3s;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    body.dark-mode .tracking-card {
+      background: #1e1e1e;
+      border-color: rgba(255,255,255,0.05);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    }
+
+    .tracking-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .order-number {
+      display: inline-block;
+      background: rgba(255, 107, 0, 0.1);
+      color: var(--primary-color);
+      padding: 0.4rem 1.2rem;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    .progress-bar-container {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin: 3rem 0;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .progress-line-background {
+      position: absolute;
+      top: 25px;
+      left: 5%;
+      right: 5%;
+      height: 4px;
+      background: #e0e0e0;
+      z-index: 1;
+      border-radius: 10px;
+    }
+    
+    body.dark-mode .progress-line-background {
+      background: #333;
+    }
+
+    .progress-line-fill {
+      position: absolute;
+      top: 25px;
+      left: 5%;
+      width: 0%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      z-index: 2;
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 10px;
+    }
+
+    .progress-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 3;
+      flex: 1;
+      text-align: center;
+    }
+
+    .step-icon-circle {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: #e9ecef;
+      color: var(--gray-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: all 0.4s;
+      border: 3px solid white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    
+    body.dark-mode .step-icon-circle {
+      background: #2a2a2a;
+      border-color: #1e1e1e;
+    }
+
+    .progress-step.active .step-icon-circle {
+      background: var(--primary-color);
+      color: white;
+      transform: scale(1.15);
+      box-shadow: 0 0 15px rgba(255, 107, 0, 0.4);
+    }
+
+    .progress-step.completed .step-icon-circle {
+      background: var(--success-color);
+      color: white;
+      box-shadow: 0 0 10px rgba(40, 167, 69, 0.3);
+    }
+
+    .step-label {
+      margin-top: 0.8rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--gray-color);
+      transition: color 0.3s;
+    }
+
+    .progress-step.active .step-label {
+      color: var(--primary-color);
+      font-weight: 700;
+    }
+
+    .progress-step.completed .step-label {
+      color: var(--success-color);
+    }
+
+    .status-alert-box {
+      text-align: center;
+      background: #fff9f5;
+      border: 1px solid #ffe6d5;
+      padding: 1.5rem;
+      border-radius: 16px;
+      max-width: 600px;
+      margin: 0 auto 2.5rem;
+      box-shadow: 0 4px 12px rgba(255,107,0,0.03);
+    }
+    
+    body.dark-mode .status-alert-box {
+      background: rgba(255, 107, 0, 0.05);
+      border-color: rgba(255, 107, 0, 0.15);
+    }
+
+    .pulse-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background-color: var(--primary-color);
+      border-radius: 50%;
+      margin-right: 8px;
+      box-shadow: 0 0 0 0 rgba(255, 107, 0, 0.7);
+      animation: pulse 1.6s infinite;
+    }
+    
+    @keyframes pulse {
+      0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(255, 107, 0, 0.7);
+      }
+      70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 8px rgba(255, 107, 0, 0);
+      }
+      100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(255, 107, 0, 0);
+      }
+    }
+
+    .status-text {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--dark-color);
+      margin-bottom: 0.3rem;
+    }
+    
+    body.dark-mode .status-text {
+      color: #fff;
+    }
+
+    .status-desc {
+      font-size: 0.9rem;
+      color: var(--gray-color);
+    }
+
+    .order-details-grid {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 900px) {
+      .order-details-grid {
+        grid-template-columns: 1fr;
+      }
+      .progress-bar-container {
+        overflow-x: auto;
+        padding-bottom: 1rem;
+      }
+      .progress-step {
+        min-width: 90px;
+      }
+    }
+
+    .order-info-section {
+      background: var(--light-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+    }
+    
+    body.dark-mode .order-info-section {
+      background: #252525;
+    }
+
+    .order-info-section h3 {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      padding-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    body.dark-mode .order-info-section h3 {
+      border-color: rgba(255,255,255,0.08);
+    }
+
+    .info-list p {
+      margin-bottom: 0.8rem;
+      font-size: 0.92rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .info-list p strong {
+      color: var(--gray-color);
+      font-weight: 500;
+    }
+
+    .info-list p span {
+      font-weight: 600;
+      text-align: right;
+    }
+
+    .whatsapp-action-box {
+      margin-top: 2.5rem;
+      text-align: center;
+    }
+
+    .btn-whatsapp-large {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      background-color: #25D366;
+      color: white;
+      padding: 0.9rem 2.2rem;
+      border-radius: 40px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.05rem;
+      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.3);
+      transition: all 0.3s;
+    }
+
+    .btn-whatsapp-large:hover {
+      background-color: #20ba59;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
+    }
+
+    .btn-whatsapp-large i {
+      font-size: 1.3rem;
+    }
+
+    .btn-copy {
+      background: none;
+      border: none;
+      color: var(--primary-color);
+      cursor: pointer;
+      margin-left: 8px;
+      font-size: 0.85rem;
+      transition: opacity 0.2s;
+    }
+
+    .btn-copy:hover {
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="theme-toggle" id="themeToggle">
+    <i class="fas fa-moon"></i>
+  </div>
+
+  <header>
+    <div class="container">
+      <div class="logo">
+        <img src="img/logo_3.png" alt="El Gustito Logo" class="logo-img">
+        <div>
+          <h1>El Gustito <span class="burger-icon">🍔</span></h1>
+          <p>Burger</p>
+        </div>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html"><i class="fas fa-home"></i> Volver al Menú</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="tracking-page">
+    <div class="container">
+      <div class="tracking-header">
+        <span class="section-tag"><i class="fas fa-map-marker-alt"></i> Seguimiento en Vivo</span>
+        <h1 class="section-title">Tu Pedido está en <span class="highlight">camino</span></h1>
+        <p class="section-subtitle">Visualizá el estado de tu pedido en tiempo real</p>
+      </div>
+
+      <div class="tracking-card">
+        <div style="text-align: center;">
+          <span class="order-number">
+            Pedido #<span id="txtOrderId">-</span> 
+            <button class="btn-copy" id="btnCopyId" title="Copiar código de pedido"><i class="far fa-copy"></i> Copiar</button>
+          </span>
+        </div>
+
+        <div class="progress-bar-container">
+          <div class="progress-line-background"></div>
+          <div class="progress-line-fill" id="progressBarFill"></div>
+          
+          <div class="progress-step" id="step1">
+            <div class="step-icon-circle"><i class="fas fa-inbox"></i></div>
+            <span class="step-label">Recibido</span>
+          </div>
+          
+          <div class="progress-step" id="step2">
+            <div class="step-icon-circle"><i class="fas fa-utensils"></i></div>
+            <span class="step-label">En Cocina</span>
+          </div>
+          
+          <div class="progress-step" id="step3">
+            <div class="step-icon-circle"><i class="fas fa-truck"></i></div>
+            <span class="step-label">En Camino</span>
+          </div>
+          
+          <div class="progress-step" id="step4">
+            <div class="step-icon-circle"><i class="fas fa-check-double"></i></div>
+            <span class="step-label">Entregado</span>
+          </div>
+        </div>
+
+        <div class="status-alert-box">
+          <div class="status-text">
+            <span class="pulse-dot"></span>
+            <span id="txtStatusLabel">Consultando estado...</span>
+          </div>
+          <p class="status-desc" id="txtStatusDesc">Estamos conectando con los servidores del local, aguardá un segundo.</p>
+        </div>
+
+        <div class="order-details-grid">
+          <div class="resumen-pedido" style="margin-top: 0; box-shadow: none; border: 1px solid rgba(0,0,0,0.06); padding: 1.5rem; border-radius: 16px;">
+            <h3 style="font-size: 1.1rem; margin-bottom: 1rem; border-bottom: 1px solid rgba(0,0,0,0.08); padding-bottom: 0.5rem; font-weight: 700;"><i class="fas fa-shopping-bag"></i> Resumen del Pedido</h3>
+            <div class="resumen-productos" id="orderItemsContainer">
+              <div class="loader" style="width: 30px; height: 30px;"></div>
+            </div>
+            <div class="resumen-total" style="padding-top: 1rem; margin-top: 1rem; border-top: 1px solid rgba(0,0,0,0.08);">
+              <span>Total:</span>
+              <strong>$<span id="txtOrderTotal">0</span></strong>
+            </div>
+          </div>
+
+          <div class="order-info-section">
+            <h3><i class="fas fa-truck"></i> Datos de Entrega</h3>
+            <div class="info-list">
+              <p><strong>Cliente:</strong> <span id="txtClienteNombre">-</span></p>
+              <p><strong>Teléfono:</strong> <span id="txtClienteTelefono">-</span></p>
+              <p><strong>Dirección:</strong> <span id="txtClienteDireccion">-</span></p>
+              <p><strong>Referencia:</strong> <span id="txtClienteReferencia">-</span></p>
+              <p><strong>Método de pago:</strong> <span id="txtMetodoPago">-</span></p>
+              <p><strong>Fecha/Hora:</strong> <span id="txtOrderTime">-</span></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="whatsapp-action-box">
+          <a href="#" target="_blank" class="btn-whatsapp-large" id="btnWhatsappLink" style="display: none;">
+            <i class="fab fa-whatsapp"></i> Confirmar / Consultar por WhatsApp
+          </a>
+          <p style="margin-top: 0.8rem; font-size: 0.82rem; color: var(--gray-color);">
+            Al hacer clic, enviarás un mensaje formateado con tu pedido directo al local para coordinar la entrega.
+          </p>
+        </div>
+
+        <div class="hero-buttons" style="margin-top: 3rem; margin-bottom: 0;">
+          <a href="index.html" class="btn-secondary" style="border-color: var(--primary-color); color: var(--primary-color);"><i class="fas fa-shopping-basket"></i> Volver a pedir</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p class="copyright">&copy; 2026 El Gustito Hamburguesas. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="javascript/config.js"></script>
+  <script src="javascript/seguimiento.js"></script>
+  <script>
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const icon = themeToggle.querySelector('i');
+        if (document.body.classList.contains('dark-mode')) {
+          icon?.classList.remove('fa-moon');
+          icon?.classList.add('fa-sun');
+        } else {
+          icon?.classList.remove('fa-sun');
+          icon?.classList.add('fa-moon');
+        }
+      });
+      
+      const isDarkMode = localStorage.getItem('darkMode') === 'true';
+      if (isDarkMode) {
+        document.body.classList.add('dark-mode');
+        const icon = themeToggle.querySelector('i');
+        if (icon) {
+          icon.classList.remove('fa-moon');
+          icon.classList.add('fa-sun');
+        }
+      }
+    }
+  </script>
+</body>
+</html>

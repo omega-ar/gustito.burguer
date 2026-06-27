@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Gustito Burger | Hamburguesas artesanales</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="img/logo_3.png">
+</head>
+<body>
+  <div class="theme-toggle" id="themeToggle">
+    <i class="fas fa-moon"></i>
+  </div>
+
+  <header>
+    <div class="container">
+      <div class="logo">
+        <img src="img/logo_3.png" alt="El Gustito Logo" class="logo-img">
+        <div>
+          <h1>El Gustito <span class="burger-icon">🍔</span></h1>
+          <p>Burger</p>
+        </div>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#inicio">Inicio</a></li>
+          <li><a href="#promos">Promos</a></li>
+          <li><a href="#nosotros">Nosotros</a></li>
+          <li><a href="#menu" class="btn-pedido">Hacer Pedido</a></li>
+          <li><a href="login.html" class="btn-empleado"><i class="fas fa-user-shield"></i> Empleados</a></li>
+        </ul>
+      </nav>
+      <div class="mobile-menu-toggle">
+        <i class="fas fa-bars"></i>
+      </div>
+    </div>
+  </header>
+
+  <section id="inicio" class="hero">
+    <div class="hero-background"></div>
+    <div class="hero-content">
+      <div class="hero-badge">🔥 Sabor artesanal</div>
+      <h2>Las Mejores Hamburguesas de <span class="highlight"> Almagro y Boedo</span></h2>
+      <p>Ingredientes frescos, preparación artesanal y el sabor que te encanta</p>
+      <div class="hero-buttons">
+        <a href="#menu" class="btn-primary">Ver Menú <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-number">15+</span>
+          <span class="stat-label">Variedades</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">100%</span>
+          <span class="stat-label">Carne</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">30min</span>
+          <span class="stat-label">Delivery</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="promos" class="promos-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Ofertas Especiales</span>
+        <h2 class="section-title">Nuestras <span class="highlight">Promociones</span></h2>
+        <p class="section-subtitle">Aprovechá estos combos exclusivos por tiempo limitado. ¡Todos incluyen fritas!</p>
+      </div>
+      
+      <div class="promos-grid" id="promosGrid">
+        <!-- Las promociones se cargan dinámicamente desde el backend -->
+        <div class="loader-container">
+          <div class="loader"></div>
+          <p>Cargando promociones...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="menu" class="menu-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Nuestro Menú</span>
+        <h2 class="section-title">Elige tu <span class="highlight">Gustito</span></h2>
+        <p class="section-subtitle">Todas nuestras hamburguesas incluyen papas fritas</p>
+      </div>
+      
+      <div class="menu-categories">
+        <button class="category-btn active" data-category="clasicas">🍔 Simples</button>
+        <button class="category-btn" data-category="especiales">🔥 Dobles</button>
+        <button class="category-btn" data-category="triples">💪 Triples</button>
+        <button class="category-btn" data-category="vegetarianas">🌿 Vegetarianas</button>
+        <button class="category-btn" data-category="acompanamientos">🍟 Acompañamientos</button>
+      </div>
+      
+      <div class="menu-grid" id="menuGrid">
+        <!-- Los productos se cargan dinámicamente desde el backend -->
+        <div class="loader-container">
+          <div class="loader"></div>
+          <p>Cargando nuestro menú...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="nosotros" class="about-section">
+    <div class="container">
+      <div class="about-content">
+        <div class="about-text">
+          <span class="section-tag">Sobre Nosotros</span>
+          <h2>Ofrecemos el mejor sabor!</h2>
+          <p>En El Gustito nos apasiona crear las mejores hamburguesas artesanales. Utilizamos ingredientes de primera calidad, pan de papa con semillas, y nuestras salsas secretas para ofrecerte una experiencia única.</p>
+          <p>Nuestro compromiso es llevar hasta tu casa el auténtico sabor de una hamburguesa gourmet, preparada con dedicación y el toque especial que nos caracteriza.</p>
+          <div class="about-features">
+            <div class="feature">
+              <i class="fas fa-leaf"></i>
+              <span>Ingredientes Frescos</span>
+            </div>
+            <div class="feature">
+              <i class="fas fa-utensils"></i>
+              <span>Preparación Artesanal</span>
+            </div>
+            <div class="feature">
+              <i class="fas fa-shipping-fast"></i>
+              <span>Delivery Rápido</span>
+            </div>
+          </div>
+        </div>
+        <div class="about-image">
+          <img src="img/Gustito.1.png" alt="El Gustito Hamburguesas">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-info">
+          <h3>El Gustito <span class="burger-icon">🍔</span></h3>
+          <p>Hamburguesas artesanales</p>
+          <div class="social-links">
+            <a href="https://instagram.com/elgustitohamburguesa" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.facebook.com/elgustitohamburguesa/" target="_blank"><i class="fab fa-facebook"></i></a>
+            <a href="https://wa.me/5491122750551" target="_blank"><i class="fab fa-whatsapp"></i></a>
+          </div>
+        </div>
+        
+        <div class="footer-contact">
+          <h4>Contacto</h4>
+          <p><i class="fas fa-phone"></i> <a href="tel:+541122750551">11 2275-0551</a></p>
+          <p><i class="fas fa-map-marker-alt"></i> Sánchez de Loria 633, CABA</p>
+          <p><i class="fas fa-truck"></i> <strong>Solo Delivery</strong> - Almagro, Boedo</p>
+        </div>
+        
+        <div class="footer-hours">
+          <h4>Horarios</h4>
+          <p>Martes a Viernes: 17:30 - 23:50</p>
+          <p>Sábados y Domingos: 18:00 - 23:50</p>
+          <p>Feriados: Consultar</p>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p class="copyright">&copy; 2025 El Gustito Hamburguesas. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="cart-floating" id="cartFloating">
+    <div class="cart-icon">
+      <i class="fas fa-shopping-cart"></i>
+      <span class="cart-count">0</span>
+    </div>
+    <div class="cart-preview">
+      <h4>Tu Pedido</h4>
+      <div class="cart-items"></div>
+      <div class="cart-total">
+        <span>Total:</span>
+        <span>$<span id="preview-total">0</span></span>
+      </div>
+      <a href="pedidos.html" class="btn-pedido">Continuar Pedido</a>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="javascript/config.js"></script>
+  <script src="javascript/main.js"></script>
+</body>
+</html>

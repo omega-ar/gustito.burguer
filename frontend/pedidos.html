@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hacer Pedido - El Gustito Burger</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="theme-toggle" id="themeToggle">
+    <i class="fas fa-moon"></i>
+  </div>
+
+  <header>
+    <div class="container">
+      <div class="logo">
+        <img src="img/logo_3.png" alt="El Gustito Logo" class="logo-img">
+        <div>
+          <h1>El Gustito <span class="burger-icon">🍔</span></h1>
+          <p>Completa tu pedido</p>
+        </div>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html"><i class="fas fa-arrow-left"></i> Volver al Menú</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="pedido-main">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Último paso</span>
+        <h1 class="section-title">Completa tus <span class="highlight">datos</span></h1>
+      </div>
+      
+      <div class="pedido-container">
+        <div class="form-container">
+          <form id="formPedido">
+            <div class="form-group">
+              <label for="nombre"><i class="fas fa-user"></i> Nombre completo *</label>
+              <input type="text" id="nombre" placeholder="Ej: Juan Pérez" required>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="direccion"><i class="fas fa-map-marker-alt"></i> Dirección de entrega *</label>
+                <input type="text" id="direccion" placeholder="Calle y número" required>
+              </div>
+              <div class="form-group">
+                <label for="telefono"><i class="fas fa-phone"></i> Teléfono *</label>
+                <input type="tel" id="telefono" placeholder="11 1234 5678" required>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="referencia"><i class="fas fa-info-circle"></i> Referencia (opcional)</label>
+              <input type="text" id="referencia" placeholder="Ej: Entre calles, edificio, departamento">
+            </div>
+            
+            <div class="form-group">
+              <label for="notas"><i class="fas fa-pen"></i> Notas adicionales</label>
+              <textarea id="notas" rows="3" placeholder="Ej: Sin cebolla, punto de cocción de la carne, etc."></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label for="metodoPago"><i class="fas fa-credit-card"></i> Método de Pago *</label>
+              <select id="metodoPago" required>
+                <option value="">Selecciona un método</option>
+                <option value="efectivo">💵 Efectivo al recibir</option>
+                <option value="transferencia">📲 Transferencia (Mercado Pago)</option>
+              </select>
+            </div>
+
+            <button type="submit" class="btn-confirmar" id="btnEnviarPedido">
+              <i class="fas fa-check-circle"></i> Confirmar Pedido
+            </button>
+          </form>
+        </div>
+        
+        <div class="resumen-pedido">
+          <h3><i class="fas fa-shopping-bag"></i> Resumen de tu pedido</h3>
+          <div class="resumen-productos" id="resumenProductos"></div>
+          <div class="resumen-total">
+            <span>Total:</span>
+            <strong>$<span id="resumenTotal">0</span></strong>
+          </div>
+          <div class="info-entrega">
+            <h4>Información de entrega</h4>
+            <p><i class="fas fa-clock"></i> Tiempo estimado: 30-45 min</p>
+            <p><i class="fas fa-truck"></i> Zona de delivery: Almagro, Boedo</p>
+            <p><i class="fas fa-phone"></i> Consultas: 11 2275-0551</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="modalConfirmacion" class="modal">
+    <div class="modal-content">
+      <div class="modal-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h3>¡Pedido Enviado!</h3>
+      <p>Tu pedido ha sido recibido y está siendo preparado.</p>
+      <p>En breve recibirás la confirmación.</p>
+      <div class="modal-buttons">
+        <button id="btnCerrarModal" class="btn-primary">Ver estado</button>
+        <a href="index.html" class="btn-secondary">Volver al menú</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="javascript/config.js"></script>
+  <script src="javascript/pedido.js"></script>
+</body>
+</html>

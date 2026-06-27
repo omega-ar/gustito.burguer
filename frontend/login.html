@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acceso Empleados - El Gustito</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .login-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+      padding: 2rem;
+    }
+    .login-card {
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 24px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 420px;
+      border: 1px solid rgba(255,255,255,0.1);
+      animation: fadeInUp 0.6s ease;
+    }
+    .login-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .login-header .logo-img {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 1rem;
+    }
+    .login-header h2 {
+      color: white;
+      margin-bottom: 0.5rem;
+    }
+    .login-header p {
+      color: var(--gray-color);
+    }
+    .input-group {
+      margin-bottom: 1.5rem;
+    }
+    .input-group label {
+      display: block;
+      color: white;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 1rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+    .input-group input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      background: rgba(255,255,255,0.15);
+    }
+    .btn-login {
+      width: 100%;
+      padding: 1rem;
+      background: var(--primary-color);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn-login:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+    .error-message {
+      background: rgba(255,0,0,0.2);
+      color: #ff6b6b;
+      padding: 0.8rem;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-header">
+        <img src="img/logo_3.png" alt="El Gustito" class="logo-img">
+        <h2>Bienvenido</h2>
+        <p>Ingresa tus credenciales</p>
+      </div>
+      <form id="loginForm">
+        <div class="input-group">
+          <label><i class="fas fa-envelope"></i> Email</label>
+          <input type="email" id="email" placeholder="cajero@elgustito.com" required>
+        </div>
+        <div class="input-group">
+          <label><i class="fas fa-lock"></i> Contraseña</label>
+          <input type="password" id="password" placeholder="••••••••" required>
+        </div>
+        <div id="errorMsg" class="error-message" style="display: none;"></div>
+        <button type="submit" class="btn-login">
+          <i class="fas fa-arrow-right"></i> Ingresar
+        </button>
+      </form>
+    </div>
+  </div>
+  <div id="toast" class="toast"></div>
+  <script src="javascript/config.js"></script>
+  <script src="javascript/login.js"></script>
+</body>
+</html>

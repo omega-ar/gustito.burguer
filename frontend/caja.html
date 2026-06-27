@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Caja - El Gustito</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/caja.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <header class="dashboard-header">
+    <div class="container">
+      <div class="logo">
+        <img src="img/logo_3.png" alt="El Gustito" class="logo-img">
+        <h2>Panel de Caja</h2>
+      </div>
+      <div class="header-info">
+        <span id="userName"></span>
+        <button id="btnLogout" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="dashboard-container">
+    <div class="caja-sidebar">
+      <div class="caja-status-card">
+        <h3><i class="fas fa-cash-register"></i> Estado de Caja</h3>
+        <div class="status-badge" id="cajaStatus">Cerrada</div>
+        <div class="caja-info">
+          <p><strong>Cajero:</strong> <span id="cajeroNombre">-</span></p>
+          <p><strong>Turno:</strong> <span id="turnoActual">-</span></p>
+          <p><strong>Apertura:</strong> <span id="horaApertura">-</span></p>
+          <p><strong>Monto inicial:</strong> $<span id="montoInicial">0</span></p>
+          <p><strong>Ventas del turno:</strong> $<span id="ventasTurno">0</span></p>
+        </div>
+        <button id="btnAbrirCaja" class="btn-abrir-caja"><i class="fas fa-unlock-alt"></i> Abrir Caja</button>
+        <button id="btnCerrarCaja" class="btn-cerrar-caja" style="display: none;"><i class="fas fa-lock"></i> Cerrar Caja</button>
+      </div>
+    </div>
+
+    <div class="caja-main">
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="pendientes">
+          <i class="fas fa-clock"></i> Pendientes <span id="pendientesCount">0</span>
+        </button>
+        <button class="tab-btn" data-tab="listos">
+          <i class="fas fa-check-circle"></i> Listos
+        </button>
+        <button class="tab-btn" data-tab="historial">
+          <i class="fas fa-history"></i> Historial
+        </button>
+      </div>
+
+      <div id="tabPendientes" class="tab-content active">
+        <div class="pedidos-grid" id="pedidosPendientes">
+          <div class="loader-container"><div class="loader"></div></div>
+        </div>
+        
+        <div class="caja-pedido-form" style="margin-top: 2.5rem;">
+          <h3><i class="fas fa-plus-circle"></i> Nuevo Pedido en Mostrador</h3>
+          <div class="form-row-caja">
+            <input type="text" id="clienteNombre" placeholder="Nombre del cliente (opcional)">
+            <input type="text" id="clienteTelefono" placeholder="Teléfono (opcional)">
+            <select id="metodoPagoCaja">
+              <option value="efectivo">💵 Efectivo</option>
+              <option value="transferencia">📲 Transferencia</option>
+            </select>
+          </div>
+          <textarea id="notasCaja" rows="2" placeholder="Notas adicionales (opcional)"></textarea>
+          
+          <div id="selectorProductos" class="selector-productos"></div>
+          
+          <div class="carrito-caja">
+            <h4>Pedido actual</h4>
+            <div id="carritoCajaItems" class="carrito-items-caja"></div>
+            <div class="carrito-total-caja">
+              <strong>Total: $<span id="carritoCajaTotal">0</span></strong>
+              <button id="btnEnviarPedidoCaja" class="btn-primary">✅ Confirmar Pedido</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tabListos" class="tab-content">
+        <div class="pedidos-grid" id="pedidosListos"></div>
+      </div>
+
+      <div id="tabHistorial" class="tab-content">
+        <div class="filtros">
+          <input type="date" id="fechaHistorial">
+          <button id="btnBuscarHistorial"><i class="fas fa-search"></i> Buscar</button>
+        </div>
+        <div class="pedidos-grid" id="pedidosHistorial"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalComanda" class="modal">
+    <div class="modal-content modal-comanda">
+      <div class="modal-header">
+        <h3><i class="fas fa-print"></i> Comanda #<span id="comandaId"></span></h3>
+        <button class="close-modal">&times;</button>
+      </div>
+      <pre id="comandaTexto" class="comanda-texto"></pre>
+      <div class="modal-buttons">
+        <button id="btnImprimirComanda" class="btn-primary"><i class="fas fa-print"></i> Imprimir</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="javascript/config.js"></script>
+  <script src="javascript/caja.js"></script>
+</body>
+</html>
