@@ -76,10 +76,38 @@ function mostrarPromosEnGrid(productos) {
   const promosGrid = document.getElementById('promosGrid');
   if (!promosGrid) return;
   
-  const promos = productos.filter(p => p.categoria === 'promo' && p.activo === true);
+  let currentDay = '';
+  try {
+    const formatter = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Argentina/Buenos_Aires',
+      weekday: 'long'
+    });
+    currentDay = formatter.format(new Date()).toLowerCase(); // "tuesday", etc.
+  } catch (error) {
+    console.error('Error al detectar el día de la semana:', error);
+    const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    currentDay = days[new Date().getDay()];
+  }
+  
+  const promos = productos.filter(p => {
+    if (p.categoria !== 'promo' || p.activo !== true) return false;
+    if (p.dias_activos && Array.isArray(p.dias_activos)) {
+      return p.dias_activos.includes(currentDay);
+    }
+    return true;
+  });
   
   if (promos.length === 0) {
-    promosGrid.innerHTML = '<div class="loader-container"><p>No hay promociones disponibles en este momento</p></div>';
+    promosGrid.innerHTML = `
+      <div class="loader-container" style="grid-column: 1 / -1; text-align: center; padding: 2rem;">
+        <p style="font-size: 1.25rem; font-weight: 600; color: var(--text-muted, #888); margin-bottom: 0.5rem;">
+          Hoy no hay promociones activas.
+        </p>
+        <p style="font-size: 1rem; color: var(--text-muted, #999);">
+          ¡Pero podés ver toda nuestra variedad en el menú de abajo!
+        </p>
+      </div>
+    `;
     return;
   }
   

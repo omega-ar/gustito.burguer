@@ -6,7 +6,7 @@ const productos = [
   {
     id: "simple_clasica",
     nombre: "Simple Clásica",
-    precio: 12000,
+    precio: 13000,
     categoria: "simple",
     descripcion:
       "Medallón 100gr, pan de papa, doble Cheddar, lechuga y tomate + Fritas",
@@ -20,13 +20,13 @@ const productos = [
     categoria: "simple",
     descripcion:
       "Medallón 100gr, pan de papa, doble Cheddar, cebolla picada y mostaza + Fritas",
-    activo: true,
+    activo: false,
     imagen: "s_chef.jpeg",
   },
   {
     id: "simple_huevo",
     nombre: "Simple con Huevo",
-    precio: 12000,
+    precio: 13000,
     categoria: "simple",
     descripcion:
       "Medallón 100gr, pan de papa, doble Cheddar, huevo a la plancha + Fritas",
@@ -40,13 +40,13 @@ const productos = [
     categoria: "simple",
     descripcion:
       "Medallón 100gr, pan de papa, doble Cheddar, mayonesa ahumada y panceta + Fritas",
-    activo: true,
+    activo: false,
     imagen: "s_ahumada.jpg",
   },
   {
     id: "simple_bbq",
     nombre: "Simple BBQ",
-    precio: 14000,
+    precio: 15000,
     categoria: "simple",
     descripcion:
       "Medallón 100gr, pan de papa, doble Cheddar, salsa BBQ y panceta + Fritas",
@@ -56,7 +56,7 @@ const productos = [
   {
     id: "simple_ranch",
     nombre: "Simple Ranch",
-    precio: 14000,
+    precio: 15000,
     categoria: "simple",
     descripcion:
       "Medallón 100gr, pan de papa, doble Cheddar, salsa Ranch y panceta + Fritas",
@@ -66,7 +66,7 @@ const productos = [
   {
     id: "simple_americana",
     nombre: "Simple Americana",
-    precio: 14000,
+    precio: 16000,
     categoria: "simple",
     descripcion:
       "Medallón 100gr, pan de papa, doble Cheddar, pepinillos y panceta + Fritas",
@@ -76,7 +76,7 @@ const productos = [
   {
     id: "simple_picante",
     nombre: "Simple Picante",
-    precio: 14000,
+    precio: 16000,
     categoria: "simple",
     descripcion:
       "Medallón 100gr, pan de papa, doble Cheddar, mayonesa, jalapeños y panceta + Fritas",
@@ -86,7 +86,7 @@ const productos = [
   {
     id: "simple_bbq_crunch",
     nombre: "Simple BBQ Crunch",
-    precio: 14000,
+    precio: 16000,
     categoria: "simple",
     descripcion:
       "Medallón 100gr, pan de papa, doble Cheddar, pepinillos mezclados con BBQ y panceta + Fritas",
@@ -96,29 +96,49 @@ const productos = [
   {
     id: "simple_deluxe",
     nombre: "Simple Deluxe",
-    precio: 14000,
+    precio: 17000,
     categoria: "simple",
     descripcion:
       "Medallón 100gr, pan de papa, doble Cheddar, mostaza, lechuga, tomate, panceta, pepinillos y mayonesa + Fritas",
     activo: true,
     imagen: "s_deluxe.jpeg",
   },
+  {
+    id: "simple_cheese",
+    nombre: "Cheeseburger Simple",
+    precio: 12000,
+    categoria: "simple",
+    descripcion:
+      "Medallón 100gr, pan de papa, doble Cheddar + Fritas",
+    activo: true,
+    imagen: "d_cheese.jpg",
+  },
+  {
+    id: "simple_onion",
+    nombre: "Simple New Onion",
+    precio: 15000,
+    categoria: "simple",
+    descripcion:
+      "Medallón 100gr, pan de papa, doble Cheddar, cebolla a la plancha y panceta + Fritas",
+    activo: true,
+    imagen: "d_onion.jpg",
+  },
 
   // DOBLES
   {
     id: "doble_cheese",
-    nombre: "Cheeseburger",
-    precio: 13000,
+    nombre: "Cheeseburger Doble",
+    precio: 16000,
     categoria: "doble",
     descripcion:
-      "2 medallones 100gr c/u, pan de papa, triple Cheddar, carne y queso + Fritas",
+      "2 medallones 100gr c/u, pan de papa, triple Cheddar + Fritas",
     activo: true,
     imagen: "d_cheese.jpg",
   },
   {
     id: "doble_clasica",
     nombre: "Doble Clásica",
-    precio: 14000,
+    precio: 17000,
     categoria: "doble",
     descripcion:
       "2 medallones 100gr c/u, pan de papa, triple Cheddar, lechuga y tomate + Fritas",
@@ -128,7 +148,7 @@ const productos = [
   {
     id: "doble_huevo",
     nombre: "Doble con Huevo",
-    precio: 14000,
+    precio: 17000,
     categoria: "doble",
     descripcion:
       "2 medallones 100gr c/u, pan de papa, triple Cheddar, huevo a la plancha + Fritas",
@@ -137,18 +157,18 @@ const productos = [
   },
   {
     id: "doble_onion",
-    nombre: "Doble Onion",
-    precio: 14000,
+    nombre: "Doble New Onion",
+    precio: 19000,
     categoria: "doble",
     descripcion:
-      "2 medallones 100gr c/u, pan de papa, triple Cheddar, cebolla a la plancha + Fritas",
+      "2 medallones 100gr c/u, pan de papa, triple Cheddar, cebolla a la plancha y panceta + Fritas",
     activo: true,
     imagen: "d_onion.jpg",
   },
   {
     id: "doble_bbq",
     nombre: "Doble BBQ",
-    precio: 15000,
+    precio: 19000,
     categoria: "doble",
     descripcion:
       "2 medallones 100gr c/u, pan de papa, triple Cheddar, salsa BBQ y panceta + Fritas",
@@ -158,7 +178,7 @@ const productos = [
   {
     id: "doble_ranch",
     nombre: "Doble Ranch",
-    precio: 15000,
+    precio: 19000,
     categoria: "doble",
     descripcion:
       "2 medallones 100gr c/u, pan de papa, triple Cheddar, salsa Ranch y panceta + Fritas",
@@ -168,7 +188,7 @@ const productos = [
   {
     id: "doble_americana",
     nombre: "Doble Americana",
-    precio: 16000,
+    precio: 20000,
     categoria: "doble",
     descripcion:
       "2 medallones 100gr c/u, pan de papa, triple Cheddar, pepinillos y panceta + Fritas",
@@ -178,7 +198,7 @@ const productos = [
   {
     id: "doble_picante",
     nombre: "Doble Picante",
-    precio: 16000,
+    precio: 20000,
     categoria: "doble",
     descripcion:
       "2 medallones 100gr c/u, pan de papa, triple Cheddar, mayonesa, jalapeños y panceta + Fritas",
@@ -188,7 +208,7 @@ const productos = [
   {
     id: "doble_bbq_crunch",
     nombre: "Doble BBQ Crunch",
-    precio: 16000,
+    precio: 20000,
     categoria: "doble",
     descripcion:
       "2 medallones 100gr c/u, pan de papa, triple Cheddar, pepinillos mezclados con BBQ y panceta + Fritas",
@@ -198,7 +218,7 @@ const productos = [
   {
     id: "doble_deluxe",
     nombre: "Doble Deluxe",
-    precio: 17000,
+    precio: 21000,
     categoria: "doble",
     descripcion:
       "2 medallones 100gr c/u, pan de papa, triple Cheddar, mostaza, lechuga, tomate, panceta, pepinillos y mayonesa + Fritas",
@@ -209,18 +229,48 @@ const productos = [
   // TRIPLES
   {
     id: "triple_cheese",
-    nombre: "Triple Cheese",
-    precio: 16000,
+    nombre: "Cheeseburger Triple",
+    precio: 19000,
     categoria: "triple",
     descripcion:
-      "3 medallones 100gr c/u, pan de papa, cuádruple Cheddar, carne y queso + Fritas",
+      "3 medallones 100gr c/u, pan de papa, cuádruple Cheddar + Fritas",
     activo: true,
     imagen: "t_cheese.jpg",
   },
   {
+    id: "triple_clasica",
+    nombre: "Triple Clásica",
+    precio: 20000,
+    categoria: "triple",
+    descripcion:
+      "3 medallones 100gr c/u, pan de papa, cuádruple Cheddar, lechuga y tomate + Fritas",
+    activo: true,
+    imagen: "d_clasica.jpeg",
+  },
+  {
+    id: "triple_huevo",
+    nombre: "Triple con Huevo",
+    precio: 20000,
+    categoria: "triple",
+    descripcion:
+      "3 medallones 100gr c/u, pan de papa, cuádruple Cheddar, huevo a la plancha + Fritas",
+    activo: true,
+    imagen: "d_huevo.jpeg",
+  },
+  {
+    id: "triple_onion",
+    nombre: "Triple New Onion",
+    precio: 22000,
+    categoria: "triple",
+    descripcion:
+      "3 medallones 100gr c/u, pan de papa, cuádruple Cheddar, cebolla a la plancha y panceta + Fritas",
+    activo: true,
+    imagen: "d_onion.jpg",
+  },
+  {
     id: "triple_bbq",
     nombre: "Triple BBQ",
-    precio: 18000,
+    precio: 22000,
     categoria: "triple",
     descripcion:
       "3 medallones 100gr c/u, pan de papa, cuádruple Cheddar, salsa BBQ y panceta + Fritas",
@@ -230,7 +280,7 @@ const productos = [
   {
     id: "triple_ranch",
     nombre: "Triple Ranch",
-    precio: 18000,
+    precio: 22000,
     categoria: "triple",
     descripcion:
       "3 medallones 100gr c/u, pan de papa, cuádruple Cheddar, salsa Ranch y panceta + Fritas",
@@ -238,19 +288,9 @@ const productos = [
     imagen: "t_ranch.jpg",
   },
   {
-    id: "triple_picante",
-    nombre: "Triple Picante",
-    precio: 19000,
-    categoria: "triple",
-    descripcion:
-      "3 medallones 100gr c/u, pan de papa, cuádruple Cheddar, jalapeños, mayonesa y panceta + Fritas",
-    activo: true,
-    imagen: "t_picante.jpeg",
-  },
-  {
     id: "triple_americana",
     nombre: "Triple Americana",
-    precio: 19000,
+    precio: 23000,
     categoria: "triple",
     descripcion:
       "3 medallones 100gr c/u, pan de papa, cuádruple Cheddar, pepinillos y panceta + Fritas",
@@ -258,9 +298,19 @@ const productos = [
     imagen: "t_americana.jpeg",
   },
   {
+    id: "triple_picante",
+    nombre: "Triple Picante",
+    precio: 23000,
+    categoria: "triple",
+    descripcion:
+      "3 medallones 100gr c/u, pan de papa, cuádruple Cheddar, jalapeños, mayonesa y panceta + Fritas",
+    activo: true,
+    imagen: "t_picante.jpeg",
+  },
+  {
     id: "triple_bbq_crunch",
     nombre: "Triple BBQ Crunch",
-    precio: 19000,
+    precio: 23000,
     categoria: "triple",
     descripcion:
       "3 medallones 100gr c/u, pan de papa, cuádruple Cheddar, pepinillos con BBQ y panceta + Fritas",
@@ -270,7 +320,7 @@ const productos = [
   {
     id: "triple_deluxe",
     nombre: "Triple Deluxe",
-    precio: 19000,
+    precio: 24000,
     categoria: "triple",
     descripcion:
       "3 medallones 100gr c/u, pan de papa, cuádruple Cheddar, mostaza, lechuga, tomate, panceta, pepinillos y mayonesa + Fritas",
@@ -282,7 +332,7 @@ const productos = [
   {
     id: "simple_vegetariana",
     nombre: "Simple Vegetariana",
-    precio: 13000,
+    precio: 14000,
     categoria: "vegetariana",
     descripcion:
       "1 medallón blend de hongos y porotos negros con romero de 100gr, doble Cheddar, pan de papa, lechuga y tomate + Fritas",
@@ -292,10 +342,20 @@ const productos = [
   {
     id: "doble_vegetariana",
     nombre: "Doble Vegetariana",
-    precio: 15000,
+    precio: 18000,
     categoria: "vegetariana",
     descripcion:
       "2 medallones blend de hongos y porotos negros con romero de 100gr, doble Cheddar, pan de papa, lechuga y tomate + Fritas",
+    activo: true,
+    imagen: "d_vegetariana.jpeg",
+  },
+  {
+    id: "triple_vegetariana",
+    nombre: "Triple Vegetariana",
+    precio: 22000,
+    categoria: "vegetariana",
+    descripcion:
+      "3 medallones blend de hongos y porotos negros con romero de 100gr, doble Cheddar, pan de papa, lechuga y tomate + Fritas",
     activo: true,
     imagen: "d_vegetariana.jpeg",
   },
@@ -336,16 +396,16 @@ const productos = [
   {
     id: "papas_cheddar",
     nombre: "Papas con Cheddar",
-    precio: 10000,
+    precio: 14000,
     categoria: "otros",
-    descripcion: "400 gr de papa, Cheddar líquido y panceta",
+    descripcion: "400 gr de papa, Cheddar líquido y panceta picada",
     activo: true,
     imagen: "Papas_Cheddar.jpg",
   },
   {
     id: "caja_fritas",
     nombre: "Caja de fritas",
-    precio: 6000,
+    precio: 9000,
     categoria: "otros",
     descripcion: "400 gr de papa frita",
     activo: true,
@@ -356,7 +416,7 @@ const productos = [
   {
     id: "extra_fritas_200",
     nombre: "Porción de fritas (200gr)",
-    precio: 4000,
+    precio: 5000,
     categoria: "extras",
     descripcion: "Porción extra de papas fritas 200gr",
     activo: true,
@@ -376,7 +436,7 @@ const productos = [
   {
     id: "extra_panceta_2",
     nombre: "Panceta (2 fetas)",
-    precio: 2000,
+    precio: 2500,
     categoria: "extras",
     descripcion: "2 fetas adicionales de panceta crocante",
     activo: true,
@@ -386,7 +446,7 @@ const productos = [
   {
     id: "extra_cheddar_feta",
     nombre: "Fetas de Cheddar",
-    precio: 2000,
+    precio: 1000,
     categoria: "extras",
     descripcion: "Fetas de queso cheddar adicionales",
     activo: true,
@@ -416,7 +476,7 @@ const productos = [
   {
     id: "extra_huevo",
     nombre: "Huevo a la plancha",
-    precio: 1500,
+    precio: 2000,
     categoria: "extras",
     descripcion: "Huevo a la plancha extra",
     activo: true,
@@ -426,7 +486,7 @@ const productos = [
   {
     id: "extra_salsas",
     nombre: "Salsas",
-    precio: 1000,
+    precio: 1500,
     categoria: "extras",
     descripcion: "Porción de salsa adicional",
     activo: true,
@@ -436,9 +496,39 @@ const productos = [
   {
     id: "extra_lechuga_tomate",
     nombre: "Lechuga y tomate",
-    precio: 1000,
+    precio: 1500,
     categoria: "extras",
     descripcion: "Lechuga y tomate frescos adicionales",
+    activo: true,
+    requiere_stock: false,
+    imagen: "default.png",
+  },
+  {
+    id: "extra_medallon_100",
+    nombre: "Medallón de carne 100gr",
+    precio: 3000,
+    categoria: "extras",
+    descripcion: "Medallón extra de carne de 100gr",
+    activo: true,
+    requiere_stock: false,
+    imagen: "default.png",
+  },
+  {
+    id: "extra_cheddar_liquido",
+    nombre: "Cheddar líquido",
+    precio: 3000,
+    categoria: "extras",
+    descripcion: "Porción adicional de queso cheddar líquido",
+    activo: true,
+    requiere_stock: false,
+    imagen: "default.png",
+  },
+  {
+    id: "extra_panceta_picada",
+    nombre: "Panceta picada",
+    precio: 3000,
+    categoria: "extras",
+    descripcion: "Porción adicional de panceta picada crocante",
     activo: true,
     requiere_stock: false,
     imagen: "default.png",
@@ -446,23 +536,64 @@ const productos = [
 
   // PROMOS
   {
-    id: "promo_2_dobles_cheese",
-    nombre: "Promo: 2 Cheeseburger Dobles",
-    precio: 25000,
+    id: "combo_cheese",
+    nombre: "Combo Cheese (Martes)",
+    precio: 13500,
     categoria: "promo",
-    descripcion: "2 Cheeseburgers Dobles + 2 Fritas (¡Ideal para compartir!)",
+    descripcion: "1 Cheeseburger Simple + Fritas + Gaseosa 600ml",
     activo: true,
+    dias_activos: ["tuesday"],
     imagen: "d_cheese.jpg",
   },
   {
-    id: "promo_2_triples_cheese",
-    nombre: "Promo: 2 Triples Cheese",
-    precio: 30000,
+    id: "combo_duplo",
+    nombre: "Combo Duplo (Martes)",
+    precio: 25900,
     categoria: "promo",
-    descripcion:
-      "2 Triples Cheeseburgers + 2 Fritas (¡Para el doble de hambre!)",
+    descripcion: "2 Cheeseburgers Simples + 2 Porciones de Fritas + 2 Gaseosas 600ml",
     activo: true,
+    dias_activos: ["tuesday"],
+    imagen: "d_cheese.jpg",
+  },
+  {
+    id: "combo_especial",
+    nombre: "Combo Especial (Miércoles)",
+    precio: 17000,
+    categoria: "promo",
+    descripcion: "1 BBQ Crunch Simple (o Americana / Picante) + Fritas + Gaseosa 600ml",
+    activo: true,
+    dias_activos: ["wednesday"],
+    imagen: "s_crunch.jpeg",
+  },
+  {
+    id: "combo_pareja_doble",
+    nombre: "Combo Pareja Doble (Miércoles)",
+    precio: 33000,
+    categoria: "promo",
+    descripcion: "2 Cheeseburgers Dobles + 2 Porciones de Fritas + 2 Gaseosas 600ml",
+    activo: true,
+    dias_activos: ["wednesday"],
+    imagen: "d_cheese.jpg",
+  },
+  {
+    id: "combo_king_triple",
+    nombre: "Combo King Triple (Jueves)",
+    precio: 19900,
+    categoria: "promo",
+    descripcion: "1 Cheeseburger Triple + Fritas + Gaseosa 600ml",
+    activo: true,
+    dias_activos: ["thursday"],
     imagen: "t_cheese.jpg",
+  },
+  {
+    id: "combo_trio_jueves",
+    nombre: "Trío de Jueves (Jueves)",
+    precio: 45900,
+    categoria: "promo",
+    descripcion: "3 Cheeseburgers Simples + Fritas Grandes + 3 Gaseosas 600ml",
+    activo: true,
+    dias_activos: ["thursday"],
+    imagen: "d_cheese.jpg",
   },
 ];
 
@@ -502,10 +633,18 @@ const ingredientes = [
   {
     id: "panceta",
     nombre: "Panceta",
-    unidad: "gramos",
-    stock_actual: 5000,
-    stock_minimo: 1000,
-    costo_unitario: 10,
+    unidad: "unidad",
+    stock_actual: 500,
+    stock_minimo: 100,
+    costo_unitario: 80,
+  },
+  {
+    id: "panceta_picada",
+    nombre: "Panceta picada",
+    unidad: "porcion",
+    stock_actual: 200,
+    stock_minimo: 40,
+    costo_unitario: 100,
   },
   {
     id: "huevo",
@@ -665,7 +804,7 @@ const recetas = [
       { ingrediente_id: "medallon_carne", cantidad: 1 },
       { ingrediente_id: "queso_cheddar", cantidad: 2 },
       { ingrediente_id: "mayonesa_ahumada", cantidad: 15 },
-      { ingrediente_id: "panceta", cantidad: 40 },
+      { ingrediente_id: "panceta", cantidad: 2 },
       { ingrediente_id: "papas_fritas", cantidad: 1 },
       { ingrediente_id: "papel_termico", cantidad: 1 },
     ],
@@ -677,7 +816,7 @@ const recetas = [
       { ingrediente_id: "medallon_carne", cantidad: 1 },
       { ingrediente_id: "queso_cheddar", cantidad: 2 },
       { ingrediente_id: "salsa_bbq", cantidad: 30 },
-      { ingrediente_id: "panceta", cantidad: 40 },
+      { ingrediente_id: "panceta", cantidad: 2 },
       { ingrediente_id: "papas_fritas", cantidad: 1 },
       { ingrediente_id: "papel_termico", cantidad: 1 },
     ],
@@ -689,7 +828,7 @@ const recetas = [
       { ingrediente_id: "medallon_carne", cantidad: 1 },
       { ingrediente_id: "queso_cheddar", cantidad: 2 },
       { ingrediente_id: "salsa_ranch", cantidad: 30 },
-      { ingrediente_id: "panceta", cantidad: 40 },
+      { ingrediente_id: "panceta", cantidad: 2 },
       { ingrediente_id: "papas_fritas", cantidad: 1 },
       { ingrediente_id: "papel_termico", cantidad: 1 },
     ],
@@ -701,7 +840,7 @@ const recetas = [
       { ingrediente_id: "medallon_carne", cantidad: 1 },
       { ingrediente_id: "queso_cheddar", cantidad: 2 },
       { ingrediente_id: "pepinillos", cantidad: 3 },
-      { ingrediente_id: "panceta", cantidad: 40 },
+      { ingrediente_id: "panceta", cantidad: 2 },
       { ingrediente_id: "papas_fritas", cantidad: 1 },
       { ingrediente_id: "papel_termico", cantidad: 1 },
     ],
@@ -714,7 +853,7 @@ const recetas = [
       { ingrediente_id: "queso_cheddar", cantidad: 2 },
       { ingrediente_id: "mayonesa", cantidad: 15 },
       { ingrediente_id: "jalapenos", cantidad: 5 },
-      { ingrediente_id: "panceta", cantidad: 40 },
+      { ingrediente_id: "panceta", cantidad: 2 },
       { ingrediente_id: "papas_fritas", cantidad: 1 },
       { ingrediente_id: "papel_termico", cantidad: 1 },
     ],
@@ -727,7 +866,7 @@ const recetas = [
       { ingrediente_id: "queso_cheddar", cantidad: 2 },
       { ingrediente_id: "pepinillos", cantidad: 3 },
       { ingrediente_id: "salsa_bbq", cantidad: 30 },
-      { ingrediente_id: "panceta", cantidad: 40 },
+      { ingrediente_id: "panceta", cantidad: 2 },
       { ingrediente_id: "papas_fritas", cantidad: 1 },
       { ingrediente_id: "papel_termico", cantidad: 1 },
     ],
@@ -741,9 +880,31 @@ const recetas = [
       { ingrediente_id: "mostaza", cantidad: 5 },
       { ingrediente_id: "lechuga", cantidad: 2 },
       { ingrediente_id: "tomate", cantidad: 2 },
-      { ingrediente_id: "panceta", cantidad: 40 },
+      { ingrediente_id: "panceta", cantidad: 2 },
       { ingrediente_id: "pepinillos", cantidad: 3 },
       { ingrediente_id: "mayonesa", cantidad: 10 },
+      { ingrediente_id: "papas_fritas", cantidad: 1 },
+      { ingrediente_id: "papel_termico", cantidad: 1 },
+    ],
+  },
+  {
+    producto_id: "simple_cheese",
+    ingredientes: [
+      { ingrediente_id: "pan_papa", cantidad: 1 },
+      { ingrediente_id: "medallon_carne", cantidad: 1 },
+      { ingrediente_id: "queso_cheddar", cantidad: 2 },
+      { ingrediente_id: "papas_fritas", cantidad: 1 },
+      { ingrediente_id: "papel_termico", cantidad: 1 },
+    ],
+  },
+  {
+    producto_id: "simple_onion",
+    ingredientes: [
+      { ingrediente_id: "pan_papa", cantidad: 1 },
+      { ingrediente_id: "medallon_carne", cantidad: 1 },
+      { ingrediente_id: "queso_cheddar", cantidad: 2 },
+      { ingrediente_id: "cebolla", cantidad: 1 },
+      { ingrediente_id: "panceta", cantidad: 2 },
       { ingrediente_id: "papas_fritas", cantidad: 1 },
       { ingrediente_id: "papel_termico", cantidad: 1 },
     ],
@@ -790,6 +951,7 @@ const recetas = [
       { ingrediente_id: "medallon_carne", cantidad: 2 },
       { ingrediente_id: "queso_cheddar", cantidad: 3 },
       { ingrediente_id: "cebolla", cantidad: 1 },
+      { ingrediente_id: "panceta", cantidad: 2 },
       { ingrediente_id: "papas_fritas", cantidad: 1 },
       { ingrediente_id: "papel_termico", cantidad: 1 },
     ],
@@ -801,7 +963,7 @@ const recetas = [
       { ingrediente_id: "medallon_carne", cantidad: 2 },
       { ingrediente_id: "queso_cheddar", cantidad: 3 },
       { ingrediente_id: "salsa_bbq", cantidad: 30 },
-      { ingrediente_id: "panceta", cantidad: 40 },
+      { ingrediente_id: "panceta", cantidad: 2 },
       { ingrediente_id: "papas_fritas", cantidad: 1 },
       { ingrediente_id: "papel_termico", cantidad: 1 },
     ],
@@ -813,7 +975,7 @@ const recetas = [
       { ingrediente_id: "medallon_carne", cantidad: 2 },
       { ingrediente_id: "queso_cheddar", cantidad: 3 },
       { ingrediente_id: "salsa_ranch", cantidad: 30 },
-      { ingrediente_id: "panceta", cantidad: 40 },
+      { ingrediente_id: "panceta", cantidad: 2 },
       { ingrediente_id: "papas_fritas", cantidad: 1 },
       { ingrediente_id: "papel_termico", cantidad: 1 },
     ],
@@ -825,7 +987,7 @@ const recetas = [
       { ingrediente_id: "medallon_carne", cantidad: 2 },
       { ingrediente_id: "queso_cheddar", cantidad: 3 },
       { ingrediente_id: "pepinillos", cantidad: 3 },
-      { ingrediente_id: "panceta", cantidad: 40 },
+      { ingrediente_id: "panceta", cantidad: 2 },
       { ingrediente_id: "papas_fritas", cantidad: 1 },
       { ingrediente_id: "papel_termico", cantidad: 1 },
     ],
@@ -838,7 +1000,7 @@ const recetas = [
       { ingrediente_id: "queso_cheddar", cantidad: 3 },
       { ingrediente_id: "mayonesa", cantidad: 15 },
       { ingrediente_id: "jalapenos", cantidad: 5 },
-      { ingrediente_id: "panceta", cantidad: 40 },
+      { ingrediente_id: "panceta", cantidad: 2 },
       { ingrediente_id: "papas_fritas", cantidad: 1 },
       { ingrediente_id: "papel_termico", cantidad: 1 },
     ],
@@ -851,7 +1013,7 @@ const recetas = [
       { ingrediente_id: "queso_cheddar", cantidad: 3 },
       { ingrediente_id: "pepinillos", cantidad: 3 },
       { ingrediente_id: "salsa_bbq", cantidad: 30 },
-      { ingrediente_id: "panceta", cantidad: 40 },
+      { ingrediente_id: "panceta", cantidad: 2 },
       { ingrediente_id: "papas_fritas", cantidad: 1 },
       { ingrediente_id: "papel_termico", cantidad: 1 },
     ],
@@ -865,7 +1027,7 @@ const recetas = [
       { ingrediente_id: "mostaza", cantidad: 5 },
       { ingrediente_id: "lechuga", cantidad: 2 },
       { ingrediente_id: "tomate", cantidad: 2 },
-      { ingrediente_id: "panceta", cantidad: 40 },
+      { ingrediente_id: "panceta", cantidad: 2 },
       { ingrediente_id: "pepinillos", cantidad: 3 },
       { ingrediente_id: "mayonesa", cantidad: 10 },
       { ingrediente_id: "papas_fritas", cantidad: 1 },
@@ -885,13 +1047,48 @@ const recetas = [
     ],
   },
   {
+    producto_id: "triple_clasica",
+    ingredientes: [
+      { ingrediente_id: "pan_papa", cantidad: 1 },
+      { ingrediente_id: "medallon_carne", cantidad: 3 },
+      { ingrediente_id: "queso_cheddar", cantidad: 4 },
+      { ingrediente_id: "lechuga", cantidad: 2 },
+      { ingrediente_id: "tomate", cantidad: 2 },
+      { ingrediente_id: "papas_fritas", cantidad: 1 },
+      { ingrediente_id: "papel_termico", cantidad: 1 },
+    ],
+  },
+  {
+    producto_id: "triple_huevo",
+    ingredientes: [
+      { ingrediente_id: "pan_papa", cantidad: 1 },
+      { ingrediente_id: "medallon_carne", cantidad: 3 },
+      { ingrediente_id: "queso_cheddar", cantidad: 4 },
+      { ingrediente_id: "huevo", cantidad: 1 },
+      { ingrediente_id: "papas_fritas", cantidad: 1 },
+      { ingrediente_id: "papel_termico", cantidad: 1 },
+    ],
+  },
+  {
+    producto_id: "triple_onion",
+    ingredientes: [
+      { ingrediente_id: "pan_papa", cantidad: 1 },
+      { ingrediente_id: "medallon_carne", cantidad: 3 },
+      { ingrediente_id: "queso_cheddar", cantidad: 4 },
+      { ingrediente_id: "cebolla", cantidad: 1 },
+      { ingrediente_id: "panceta", cantidad: 2 },
+      { ingrediente_id: "papas_fritas", cantidad: 1 },
+      { ingrediente_id: "papel_termico", cantidad: 1 },
+    ],
+  },
+  {
     producto_id: "triple_bbq",
     ingredientes: [
       { ingrediente_id: "pan_papa", cantidad: 1 },
       { ingrediente_id: "medallon_carne", cantidad: 3 },
       { ingrediente_id: "queso_cheddar", cantidad: 4 },
       { ingrediente_id: "salsa_bbq", cantidad: 30 },
-      { ingrediente_id: "panceta", cantidad: 40 },
+      { ingrediente_id: "panceta", cantidad: 2 },
       { ingrediente_id: "papas_fritas", cantidad: 1 },
       { ingrediente_id: "papel_termico", cantidad: 1 },
     ],
@@ -903,7 +1100,19 @@ const recetas = [
       { ingrediente_id: "medallon_carne", cantidad: 3 },
       { ingrediente_id: "queso_cheddar", cantidad: 4 },
       { ingrediente_id: "salsa_ranch", cantidad: 30 },
-      { ingrediente_id: "panceta", cantidad: 40 },
+      { ingrediente_id: "panceta", cantidad: 2 },
+      { ingrediente_id: "papas_fritas", cantidad: 1 },
+      { ingrediente_id: "papel_termico", cantidad: 1 },
+    ],
+  },
+  {
+    producto_id: "triple_americana",
+    ingredientes: [
+      { ingrediente_id: "pan_papa", cantidad: 1 },
+      { ingrediente_id: "medallon_carne", cantidad: 3 },
+      { ingrediente_id: "queso_cheddar", cantidad: 4 },
+      { ingrediente_id: "pepinillos", cantidad: 3 },
+      { ingrediente_id: "panceta", cantidad: 2 },
       { ingrediente_id: "papas_fritas", cantidad: 1 },
       { ingrediente_id: "papel_termico", cantidad: 1 },
     ],
@@ -916,19 +1125,7 @@ const recetas = [
       { ingrediente_id: "queso_cheddar", cantidad: 4 },
       { ingrediente_id: "mayonesa", cantidad: 15 },
       { ingrediente_id: "jalapenos", cantidad: 5 },
-      { ingrediente_id: "panceta", cantidad: 40 },
-      { ingrediente_id: "papas_fritas", cantidad: 1 },
-      { ingrediente_id: "papel_termico", cantidad: 1 },
-    ],
-  },
-  {
-    producto_id: "triple_americana",
-    ingredientes: [
-      { ingrediente_id: "pan_papa", cantidad: 1 },
-      { ingrediente_id: "medallon_carne", cantidad: 3 },
-      { ingrediente_id: "queso_cheddar", cantidad: 4 },
-      { ingrediente_id: "pepinillos", cantidad: 3 },
-      { ingrediente_id: "panceta", cantidad: 40 },
+      { ingrediente_id: "panceta", cantidad: 2 },
       { ingrediente_id: "papas_fritas", cantidad: 1 },
       { ingrediente_id: "papel_termico", cantidad: 1 },
     ],
@@ -941,7 +1138,7 @@ const recetas = [
       { ingrediente_id: "queso_cheddar", cantidad: 4 },
       { ingrediente_id: "pepinillos", cantidad: 3 },
       { ingrediente_id: "salsa_bbq", cantidad: 30 },
-      { ingrediente_id: "panceta", cantidad: 40 },
+      { ingrediente_id: "panceta", cantidad: 2 },
       { ingrediente_id: "papas_fritas", cantidad: 1 },
       { ingrediente_id: "papel_termico", cantidad: 1 },
     ],
@@ -955,7 +1152,7 @@ const recetas = [
       { ingrediente_id: "mostaza", cantidad: 5 },
       { ingrediente_id: "lechuga", cantidad: 2 },
       { ingrediente_id: "tomate", cantidad: 2 },
-      { ingrediente_id: "panceta", cantidad: 40 },
+      { ingrediente_id: "panceta", cantidad: 2 },
       { ingrediente_id: "pepinillos", cantidad: 3 },
       { ingrediente_id: "mayonesa", cantidad: 10 },
       { ingrediente_id: "papas_fritas", cantidad: 1 },
@@ -988,6 +1185,18 @@ const recetas = [
       { ingrediente_id: "papel_termico", cantidad: 1 },
     ],
   },
+  {
+    producto_id: "triple_vegetariana",
+    ingredientes: [
+      { ingrediente_id: "pan_papa", cantidad: 1 },
+      { ingrediente_id: "medallon_veggie", cantidad: 3 },
+      { ingrediente_id: "queso_cheddar", cantidad: 2 },
+      { ingrediente_id: "lechuga", cantidad: 2 },
+      { ingrediente_id: "tomate", cantidad: 2 },
+      { ingrediente_id: "papas_fritas", cantidad: 1 },
+      { ingrediente_id: "papel_termico", cantidad: 1 },
+    ],
+  },
 
   // OTROS
   {
@@ -995,7 +1204,7 @@ const recetas = [
     ingredientes: [
       { ingrediente_id: "papas_fritas", cantidad: 1 },
       { ingrediente_id: "cheddar_liquido", cantidad: 50 },
-      { ingrediente_id: "panceta", cantidad: 30 },
+      { ingrediente_id: "panceta_picada", cantidad: 1 },
       { ingrediente_id: "papel_termico", cantidad: 1 },
     ],
   },
@@ -1007,9 +1216,42 @@ const recetas = [
     ],
   },
 
-  // PROMO
+  // PROMOS
   {
-    producto_id: "promo_2_dobles_cheese",
+    producto_id: "combo_cheese",
+    ingredientes: [
+      { ingrediente_id: "pan_papa", cantidad: 1 },
+      { ingrediente_id: "medallon_carne", cantidad: 1 },
+      { ingrediente_id: "queso_cheddar", cantidad: 2 },
+      { ingrediente_id: "papas_fritas", cantidad: 1 },
+      { ingrediente_id: "papel_termico", cantidad: 1 },
+    ],
+  },
+  {
+    producto_id: "combo_duplo",
+    ingredientes: [
+      { ingrediente_id: "pan_papa", cantidad: 2 },
+      { ingrediente_id: "medallon_carne", cantidad: 2 },
+      { ingrediente_id: "queso_cheddar", cantidad: 4 },
+      { ingrediente_id: "papas_fritas", cantidad: 2 },
+      { ingrediente_id: "papel_termico", cantidad: 1 },
+    ],
+  },
+  {
+    producto_id: "combo_especial",
+    ingredientes: [
+      { ingrediente_id: "pan_papa", cantidad: 1 },
+      { ingrediente_id: "medallon_carne", cantidad: 1 },
+      { ingrediente_id: "queso_cheddar", cantidad: 2 },
+      { ingrediente_id: "pepinillos", cantidad: 3 },
+      { ingrediente_id: "salsa_bbq", cantidad: 30 },
+      { ingrediente_id: "panceta", cantidad: 2 },
+      { ingrediente_id: "papas_fritas", cantidad: 1 },
+      { ingrediente_id: "papel_termico", cantidad: 1 },
+    ],
+  },
+  {
+    producto_id: "combo_pareja_doble",
     ingredientes: [
       { ingrediente_id: "pan_papa", cantidad: 2 },
       { ingrediente_id: "medallon_carne", cantidad: 4 },
@@ -1019,12 +1261,22 @@ const recetas = [
     ],
   },
   {
-    producto_id: "promo_2_triples_cheese",
+    producto_id: "combo_king_triple",
     ingredientes: [
-      { ingrediente_id: "pan_papa", cantidad: 2 },
-      { ingrediente_id: "medallon_carne", cantidad: 6 },
-      { ingrediente_id: "queso_cheddar", cantidad: 8 },
-      { ingrediente_id: "papas_fritas", cantidad: 2 },
+      { ingrediente_id: "pan_papa", cantidad: 1 },
+      { ingrediente_id: "medallon_carne", cantidad: 3 },
+      { ingrediente_id: "queso_cheddar", cantidad: 4 },
+      { ingrediente_id: "papas_fritas", cantidad: 1 },
+      { ingrediente_id: "papel_termico", cantidad: 1 },
+    ],
+  },
+  {
+    producto_id: "combo_trio_jueves",
+    ingredientes: [
+      { ingrediente_id: "pan_papa", cantidad: 3 },
+      { ingrediente_id: "medallon_carne", cantidad: 3 },
+      { ingrediente_id: "queso_cheddar", cantidad: 6 },
+      { ingrediente_id: "papas_fritas", cantidad: 3 },
       { ingrediente_id: "papel_termico", cantidad: 1 },
     ],
   },
@@ -1043,7 +1295,7 @@ async function deleteCollection(collectionPath) {
 
 async function seedDatabase() {
   console.log(
-    "\n🚀 Comenzando carga de datos del menú Junio - Julio 2026...\n",
+    "\n🚀 Comenzando carga de datos del nuevo menú...\n",
   );
 
   try {
