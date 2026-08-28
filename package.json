@@ -1,0 +1,23 @@
+{
+  "name": "gustito",
+  "version": "1.0.0",
+  "description": "Este proyecto es una plataforma web completa de punta a punta (End-to-End) diseñada para **El Gustito Burger**, la cual permite a los clientes realizar pedidos en línea con un sistema de **seguimiento en vivo**, y proporciona a los cajeros y administradores un potente **Panel de Control (Caja)** para gestionar la preparación, despachos, stock de ingredientes y arqueo de turnos de caja en efectivo y transferencia.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/omega-ar/gustito.burguer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/omega-ar/gustito.burguer/issues"
+  },
+  "homepage": "https://github.com/omega-ar/gustito.burguer#readme"
+}

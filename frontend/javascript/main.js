@@ -138,6 +138,17 @@ function mostrarPromosEnGrid(productos) {
   });
 }
 
+function esElegibleDescuento(producto) {
+  const ahora = new Date();
+  const fechaFin = new Date('2026-09-28T00:00:00-03:00'); // 30 días a partir del 28 de agosto de 2026
+  if (ahora > fechaFin) return false;
+  
+  const esHamburguesa = ['simple', 'doble', 'triple', 'vegetariana'].includes(producto.categoria);
+  const esPapasCheddar = producto.id === 'papas_cheddar';
+  
+  return esHamburguesa || esPapasCheddar;
+}
+
 function mostrarProductosEnGrid(productos) {
   const menuGrid = document.getElementById('menuGrid');
   
@@ -172,25 +183,39 @@ function mostrarProductosEnGrid(productos) {
   
   productosMostrar.sort((a, b) => a.precio - b.precio);
   
-  menuGrid.innerHTML = productosMostrar.map(producto => `
-    <div class="producto" data-category="${categoriaMap[producto.categoria]}">
-      <div class="producto-img">
-        <img src="img/${producto.imagen || 'default.png'}" alt="${producto.nombre}" onerror="this.src='img/default.png'">
-        <div class="producto-overlay">
-          <span class="precio precio-con-descuento">
-            <span class="precio-nuevo">$${producto.precio.toLocaleString()}</span>
-          </span>
+  menuGrid.innerHTML = productosMostrar.map(producto => {
+    const tieneDescuento = esElegibleDescuento(producto);
+    const precioFinal = tieneDescuento ? Math.round(producto.precio * 0.9) : producto.precio;
+    
+    const precioOriginalHTML = tieneDescuento 
+      ? `<span class="precio-viejo" style="text-decoration: line-through; opacity: 0.6; font-size: 0.85em; margin-right: 8px; color: var(--gray-color, #777); font-weight: normal;">$${producto.precio.toLocaleString()}</span>`
+      : '';
+    const badgeDescuentoHTML = tieneDescuento
+      ? `<span class="badge-descuento" style="background-color: var(--primary-color); color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.7em; font-weight: bold; margin-left: 5px; text-transform: uppercase;">10% OFF</span>`
+      : '';
+
+    return `
+      <div class="producto" data-category="${categoriaMap[producto.categoria]}">
+        <div class="producto-img">
+          <img src="img/${producto.imagen || 'default.png'}" alt="${producto.nombre}" onerror="this.src='img/default.png'">
+          <div class="producto-overlay">
+            <span class="precio precio-con-descuento" style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap;">
+              ${precioOriginalHTML}
+              <span class="precio-nuevo">$${precioFinal.toLocaleString()}</span>
+              ${badgeDescuentoHTML}
+            </span>
+          </div>
+        </div>
+        <div class="producto-info">
+          <h3>${producto.nombre}</h3>
+          <p>${producto.descripcion || 'Deliciosa hamburguesa artesanal'}</p>
+          <button class="btn-agregar" data-id="${producto.id}" data-nombre="${producto.nombre}" data-precio="${precioFinal}">
+            Agregar al Pedido
+          </button>
         </div>
       </div>
-      <div class="producto-info">
-        <h3>${producto.nombre}</h3>
-        <p>${producto.descripcion || 'Deliciosa hamburguesa artesanal'}</p>
-        <button class="btn-agregar" data-id="${producto.id}" data-nombre="${producto.nombre}" data-precio="${producto.precio}">
-          Agregar al Pedido
-        </button>
-      </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
   
   document.querySelectorAll('.menu-grid .btn-agregar').forEach(btn => {
     btn.removeEventListener('click', handleAgregarClick);

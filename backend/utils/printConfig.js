@@ -12,36 +12,38 @@ const PRINT_CONFIG = {
           font-family: 'Courier New', monospace;
           font-size: 12px;
           width: ${this.paperWidth === 'A4' ? '210mm' : this.paperWidth};
-          margin: 0;
-          padding: 4px;
+          margin: 0 auto;
+          padding: 12px 8px 8px 8px;
+          box-sizing: border-box;
+          line-height: 1.25;
         }
         .comanda-header {
           text-align: center;
           border-bottom: 1px dashed #000;
-          padding-bottom: 8px;
-          margin-bottom: 8px;
+          padding-bottom: 4px;
+          margin-bottom: 4px;
         }
         .comanda-header h2 {
-          font-size: 16px;
+          font-size: 14px;
           margin: 0;
         }
         .comanda-info {
-          margin-bottom: 8px;
+          margin-bottom: 4px;
           border-bottom: 1px dashed #000;
-          padding-bottom: 8px;
+          padding-bottom: 4px;
         }
         .comanda-info p {
-          margin: 2px 0;
+          margin: 1px 0;
         }
         .comanda-items {
-          margin-bottom: 8px;
+          margin-bottom: 4px;
           border-bottom: 1px dashed #000;
-          padding-bottom: 8px;
+          padding-bottom: 4px;
         }
         .item-row {
           display: flex;
           justify-content: space-between;
-          margin: 3px 0;
+          margin: 2px 0;
         }
         .item-nombre {
           flex: 1;
@@ -54,15 +56,15 @@ const PRINT_CONFIG = {
           display: flex;
           justify-content: space-between;
           font-weight: bold;
-          font-size: 14px;
+          font-size: 13px;
           margin-top: 4px;
         }
         .comanda-footer {
           text-align: center;
-          margin-top: 8px;
+          margin-top: 6px;
           font-size: 11px;
           border-top: 1px dashed #000;
-          padding-top: 8px;
+          padding-top: 4px;
         }
         .no-print {
           display: none;

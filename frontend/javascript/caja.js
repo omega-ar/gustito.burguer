@@ -6,6 +6,42 @@ let pedidosListos = [];
 let productosMenu = [];
 let carritoCaja = [];
 
+let idsConocidos = new Set();
+let esPrimerCarga = true;
+let sonidoHabilitado = true;
+
+function reproducirSonidoNotificacion() {
+  const audio = new Audio('audio/iphone.mp3');
+  audio.play().catch(error => {
+    console.log('Audio file play failed or not found, synthesizing tone instead...');
+    sintetizarSonidoNotificacion();
+  });
+}
+
+function sintetizarSonidoNotificacion() {
+  try {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const playNote = (frequency, startTime, duration) => {
+      const osc = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(frequency, startTime);
+      gainNode.gain.setValueAtTime(0.15, startTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+      osc.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      osc.start(startTime);
+      osc.stop(startTime + duration);
+    };
+    const now = audioCtx.currentTime;
+    playNote(1046.50, now, 0.12);      // C6
+    playNote(1318.51, now + 0.08, 0.12); // E6
+    playNote(1567.98, now + 0.16, 0.35); // G6
+  } catch (e) {
+    console.error('Failed to play synthesized sound:', e);
+  }
+}
+
 function mostrarToast(mensaje, tipo = 'info') {
   const toast = document.getElementById('toast');
   if (!toast) {
@@ -70,32 +106,110 @@ function imprimirComandaLocal(pedido) {
   }
   
   const fecha = new Date().toLocaleString('es-AR');
-  const lineas = [];
-  
-  lineas.push('================================');
-  lineas.push('     🍔 EL GUSTITO BURGER');
-  lineas.push('================================');
-  lineas.push(`Pedido: #${pedido.id}`);
-  lineas.push(`Fecha: ${fecha}`);
-  lineas.push(`Cliente: ${pedido.cliente?.nombre || 'Mostrador'}`);
-  if (pedido.cliente?.telefono) lineas.push(`Tel: ${pedido.cliente.telefono}`);
-  if (pedido.cliente?.direccion && pedido.cliente.direccion !== 'Mostrador') lineas.push(`Dirección: ${pedido.cliente.direccion}`);
-  if (pedido.cliente?.referencia) lineas.push(`Ref: ${pedido.cliente.referencia}`);
-  if (pedido.notas) lineas.push(`Notas: ${pedido.notas}`);
-  lineas.push('--------------------------------');
-  
-  for (const item of pedido.items) {
-    lineas.push(`${item.cantidad}x ${item.nombre} - $${(item.precio * item.cantidad).toLocaleString()}`);
-  }
-  
-  lineas.push('--------------------------------');
-  lineas.push(`TOTAL: $${(pedido.total || 0).toLocaleString()}`);
-  lineas.push('================================');
-  lineas.push('¡Gracias por elegirnos!');
-  lineas.push('================================');
+  const itemsHTML = (pedido.items || []).map(item => `
+    <div style="display: flex; justify-content: space-between; margin: 2px 0;">
+      <span style="flex: 1;">${item.cantidad}x ${item.nombre}</span>
+      <span style="text-align: right; min-width: 60px;">$${(item.precio * item.cantidad).toLocaleString()}</span>
+    </div>
+  `).join('');
+
+  const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <style>
+        @page {
+          size: 80mm auto;
+          margin: 0;
+        }
+        body {
+          font-family: 'Courier New', monospace;
+          font-size: 12px;
+          width: 80mm;
+          margin: 0 auto;
+          padding: 12px 8px 8px 8px;
+          box-sizing: border-box;
+          line-height: 1.25;
+        }
+        .header {
+          text-align: center;
+          border-bottom: 1px dashed #000;
+          padding-bottom: 4px;
+          margin-bottom: 4px;
+        }
+        .header h2 {
+          font-size: 14px;
+          margin: 0;
+        }
+        .info {
+          margin-bottom: 4px;
+          border-bottom: 1px dashed #000;
+          padding-bottom: 4px;
+        }
+        .info p {
+          margin: 1px 0;
+        }
+        .items {
+          margin-bottom: 4px;
+          border-bottom: 1px dashed #000;
+          padding-bottom: 4px;
+        }
+        .total {
+          display: flex;
+          justify-content: space-between;
+          font-weight: bold;
+          font-size: 13px;
+          margin-top: 4px;
+        }
+        .footer {
+          text-align: center;
+          margin-top: 6px;
+          font-size: 11px;
+          border-top: 1px dashed #000;
+          padding-top: 4px;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="header">
+        <h2>🍔 EL GUSTITO BURGER</h2>
+        <p>Hamburguesas Artesanales</p>
+      </div>
+
+      <div class="info">
+        <p><strong>Pedido #${pedido.id}</strong></p>
+        <p>Fecha: ${fecha}</p>
+        <p>Cliente: ${pedido.cliente?.nombre || 'Mostrador'}</p>
+        ${pedido.cliente?.telefono ? `<p>Tel: ${pedido.cliente.telefono}</p>` : ''}
+        ${pedido.cliente?.direccion && pedido.cliente.direccion !== 'Mostrador' 
+          ? `<p>Dir: ${pedido.cliente.direccion}</p>` : ''}
+        ${pedido.cliente?.referencia ? `<p>Ref: ${pedido.cliente.referencia}</p>` : ''}
+        <p>Pago: ${pedido.metodoPago === 'efectivo' ? '💵 Efectivo' : '📲 Transferencia'}</p>
+        <p>Fuente: ${pedido.fuente === 'caja' ? '🏪 Mostrador' : '🌐 Web'}</p>
+      </div>
+
+      <div class="items">
+        ${itemsHTML}
+      </div>
+
+      <div class="total">
+        <span>TOTAL:</span>
+        <span>$${(pedido.total || 0).toLocaleString()}</span>
+      </div>
+
+      ${pedido.notas ? `<p style="margin: 4px 0 0 0;"><strong>Notas:</strong> ${pedido.notas}</p>` : ''}
+
+      <div class="footer">
+        <p>¡Gracias por elegirnos!</p>
+        <p>Sánchez de Loria 633, CABA</p>
+      </div>
+    </body>
+    </html>
+  `;
   
   const ventana = window.open('');
-  ventana.document.write(`<pre style="font-family: monospace; font-size: 12px; white-space: pre;">${lineas.join('\n')}</pre>`);
+  ventana.document.write(html);
   ventana.document.close();
   ventana.print();
   ventana.close();
@@ -229,6 +343,17 @@ async function cargarProductosMenu() {
   }
 }
 
+function esElegibleDescuento(producto) {
+  const ahora = new Date();
+  const fechaFin = new Date('2026-09-28T00:00:00-03:00'); // 30 días a partir del 28 de agosto de 2026
+  if (ahora > fechaFin) return false;
+  
+  const esHamburguesa = ['simple', 'doble', 'triple', 'vegetariana'].includes(producto.categoria);
+  const esPapasCheddar = producto.id === 'papas_cheddar';
+  
+  return esHamburguesa || esPapasCheddar;
+}
+
 function mostrarSelectorProductos() {
   const container = document.getElementById('selectorProductos');
   if (!container) return;
@@ -255,10 +380,20 @@ function mostrarSelectorProductos() {
               <div class="productos-mini-grid">`;
     
     for (const prod of productosCat) {
+      const tieneDescuento = esElegibleDescuento(prod);
+      const precioFinal = tieneDescuento ? Math.round(prod.precio * 0.9) : prod.precio;
+      
+      let priceLabel = '';
+      if (tieneDescuento) {
+        priceLabel = `<span style="text-decoration: line-through; opacity: 0.6; font-size: 0.8em; margin-right: 4px;">$${prod.precio.toLocaleString()}</span><b style="color: #2ed573;">$${precioFinal.toLocaleString()}</b> <span style="background-color: var(--primary-color, #ff6b00); color: white; padding: 1px 3px; border-radius: 3px; font-size: 0.65em; font-weight: bold; margin-left: 2px;">10% OFF</span>`;
+      } else {
+        priceLabel = `$${prod.precio.toLocaleString()}`;
+      }
+
       html += `
-        <button class="btn-producto-caja" data-id="${prod.id}" data-nombre="${prod.nombre}" data-precio="${prod.precio}">
+        <button class="btn-producto-caja" data-id="${prod.id}" data-nombre="${prod.nombre}" data-precio="${precioFinal}">
           ${prod.nombre}<br>
-          <small>$${prod.precio.toLocaleString()}</small>
+          <small>${priceLabel}</small>
         </button>
       `;
     }
@@ -308,12 +443,22 @@ function actualizarCarritoCajaUI() {
     const subtotal = item.precio * item.cantidad;
     total += subtotal;
     
+    const prodOriginal = productosMenu.find(p => p.id === item.id);
+    const tieneDescuento = prodOriginal ? esElegibleDescuento(prodOriginal) : false;
+    
+    let subtotalHTML = '';
+    if (tieneDescuento && prodOriginal) {
+      subtotalHTML = `<span style="font-size: 0.8em; color: #a5a5a5; text-decoration: line-through; margin-right: 5px;">$${(prodOriginal.precio * item.cantidad).toLocaleString()}</span><strong style="color: var(--primary-color, #ff6b00);">$${subtotal.toLocaleString()}</strong>`;
+    } else {
+      subtotalHTML = `<span>$${subtotal.toLocaleString()}</span>`;
+    }
+    
     const div = document.createElement('div');
     div.className = 'carrito-item-caja';
     div.innerHTML = `
       <span>${item.nombre} x${item.cantidad}</span>
-      <span>$${subtotal.toLocaleString()}</span>
-      <button class="btn-remover-caja" data-index="${idx}"><i class="fas fa-trash"></i></button>
+      <span>${subtotalHTML}</span>
+      <button class="btn-remover-caja" data-index="${idx}"><i class="fas fa-trash-alt"></i></button>
     `;
     container.appendChild(div);
   });
@@ -430,7 +575,32 @@ async function cargarPedidosPendientes() {
     }
     
     const data = await response.json();
-    pedidosPendientes = Array.isArray(data) ? data : (data.pedidos || []);
+    const nuevosPedidos = Array.isArray(data) ? data : (data.pedidos || []);
+    
+    let hayNuevoPedido = false;
+    nuevosPedidos.forEach(pedido => {
+      if (pedido.estado === 'pendiente' && !idsConocidos.has(pedido.id)) {
+        if (!esPrimerCarga) {
+          hayNuevoPedido = true;
+        }
+        idsConocidos.add(pedido.id);
+      }
+    });
+    
+    if (esPrimerCarga) {
+      nuevosPedidos.forEach(pedido => {
+        if (pedido.estado === 'pendiente') {
+          idsConocidos.add(pedido.id);
+        }
+      });
+      esPrimerCarga = false;
+    }
+    
+    if (hayNuevoPedido && sonidoHabilitado) {
+      reproducirSonidoNotificacion();
+    }
+    
+    pedidosPendientes = nuevosPedidos;
     mostrarPedidosPendientes();
   } catch (error) {
     console.error('Error:', error);
@@ -780,6 +950,24 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('btnCerrarCaja')?.addEventListener('click', cerrarCaja);
   document.getElementById('btnEnviarPedidoCaja')?.addEventListener('click', enviarPedidoCaja);
   document.getElementById('btnBuscarHistorial')?.addEventListener('click', buscarHistorial);
+  
+  document.getElementById('btnSoundToggle')?.addEventListener('click', () => {
+    sonidoHabilitado = !sonidoHabilitado;
+    const icon = document.querySelector('#btnSoundToggle i');
+    if (sonidoHabilitado) {
+      if (icon) {
+        icon.className = 'fas fa-volume-up';
+      }
+      mostrarToast('Sonido de notificaciones activado', 'success');
+      reproducirSonidoNotificacion();
+    } else {
+      if (icon) {
+        icon.className = 'fas fa-volume-mute';
+      }
+      mostrarToast('Sonido de notificaciones silenciado', 'info');
+    }
+  });
+
   document.getElementById('btnLogout')?.addEventListener('click', () => {
     localStorage.removeItem('token');
     localStorage.removeItem('usuario');

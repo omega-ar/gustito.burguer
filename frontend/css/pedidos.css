@@ -357,3 +357,201 @@
     flex-direction: column;
   }
 }
+
+/* Estilos para el ticket de resumen con controles */
+.resumen-productos {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ticket-item {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+body.dark-mode .ticket-item {
+  background: #1e1e1e;
+  border-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.ticket-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  border-color: var(--primary-color);
+}
+
+body.dark-mode .ticket-item:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.ticket-item-row1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.ticket-item-name {
+  font-weight: 800;
+  color: var(--dark-color);
+  font-size: 1.05rem;
+}
+
+body.dark-mode .ticket-item-name {
+  color: #fff;
+}
+
+.ticket-item-price-desc {
+  font-size: 0.9rem;
+  color: var(--gray-color);
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.ticket-item-row2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(0, 0, 0, 0.06);
+}
+
+body.dark-mode .ticket-item-row2 {
+  border-top-color: rgba(255, 255, 255, 0.06);
+}
+
+.ticket-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.qty-controls {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid var(--primary-color);
+  border-radius: 20px;
+  background-color: transparent;
+  overflow: hidden;
+  height: 32px;
+  transition: all 0.3s;
+}
+
+.qty-btn {
+  border: none;
+  background: transparent;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-color);
+  transition: all 0.2s;
+}
+
+.qty-btn:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.qty-val {
+  min-width: 28px;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--dark-color);
+}
+
+body.dark-mode .qty-val {
+  color: #fff;
+}
+
+.btn-delete-item {
+  border: none;
+  background: rgba(255, 71, 87, 0.1);
+  color: #ff4757;
+  cursor: pointer;
+  font-size: 1rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.btn-delete-item:hover {
+  background: #ff4757;
+  color: white;
+  transform: scale(1.15) rotate(5deg);
+}
+
+.ticket-item-subtotal {
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: var(--primary-color);
+}
+
+/* Ayudas de formulario */
+.form-help-text {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--gray-color, #777);
+  margin-top: 4px;
+}
+
+.form-help-text i {
+  margin-right: 4px;
+}
+
+/* Botón Explorar Menú */
+.btn-explorar-menu {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1rem;
+  margin-top: 15px;
+  transition: all 0.3s;
+  box-shadow: 0 4px 10px rgba(255, 107, 0, 0.2);
+}
+
+.btn-explorar-menu:hover {
+  background-color: var(--primary-dark, #e05e00);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(255, 107, 0, 0.3);
+}
+
+.badge-descuento-ticket {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 1px 4px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: bold;
+  margin-left: 5px;
+}
