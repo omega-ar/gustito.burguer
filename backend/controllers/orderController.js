@@ -36,14 +36,12 @@ function isStoreOpen() {
     const timeInMinutes = hour * 60 + minute;
     const weekdayLower = weekday.toLowerCase();
     
-    // Martes a Viernes: 17:30 - 23:50
     if (['tuesday', 'wednesday', 'thursday', 'friday'].includes(weekdayLower)) {
       const openTime = 17 * 60 + 30;
       const closeTime = 23 * 60 + 50;
       return timeInMinutes >= openTime && timeInMinutes <= closeTime;
     }
     
-    // Sábados y Domingos: 18:00 - 23:50
     if (['saturday', 'sunday'].includes(weekdayLower)) {
       const openTime = 18 * 60;
       const closeTime = 23 * 60 + 50;
@@ -51,11 +49,45 @@ function isStoreOpen() {
     }
   } catch (error) {
     console.error('Error formatting time in America/Argentina/Buenos_Aires:', error);
-    // Fallback: If timezone format fails, allow order (better to serve customer than to block due to node discrepancy)
     return true;
   }
   
   return false;
+}
+
+async function generarNuevoOrderId() {
+  try {
+    const cajaAbiertaQuery = await db.collection('caja')
+      .where('cerrado', '==', false)
+      .limit(1)
+      .get();
+
+    if (!cajaAbiertaQuery.empty) {
+      const turnoDoc = cajaAbiertaQuery.docs[0];
+      const turnoRef = turnoDoc.ref;
+      const turnoData = turnoDoc.data();
+
+      let prefijo = turnoData.prefijoPedido;
+      if (!prefijo || prefijo.length !== 6) {
+        prefijo = Math.floor(100000 + Math.random() * 900000).toString();
+      }
+
+      const siguienteNumero = (turnoData.ultimoNumeroPedido || 0) + 1;
+      const sufijo = String(siguienteNumero).padStart(2, '0');
+
+      await turnoRef.update({
+        prefijoPedido: prefijo,
+        ultimoNumeroPedido: siguienteNumero
+      });
+
+      return `${prefijo}${sufijo}`;
+    }
+  } catch (error) {
+    console.error('Error al generar ID de pedido vinculado al turno:', error);
+  }
+
+  const fallbackPrefijo = Math.floor(100000 + Math.random() * 900000).toString();
+  return `${fallbackPrefijo}01`;
 }
 
 function generarComanda(pedido) {
@@ -147,7 +179,7 @@ exports.createOrder = async (req, res) => {
       }
     }
 
-    const orderId = Date.now().toString();
+    const orderId = await generarNuevoOrderId();
     
     const pedido = {
       id: orderId,
@@ -232,7 +264,6 @@ exports.marcarListo = async (req, res) => {
     
     const batch = db.batch();
     
-    // Si el pedido no está registrado en caja y pasa a listo
     if (!pedido.registradoEnCaja) {
       const { registrarVenta } = require('./cashController');
       try {
@@ -243,7 +274,6 @@ exports.marcarListo = async (req, res) => {
       }
     }
     
-    // Si el stock no ha sido descontado
     if (!pedido.stockDescontado) {
       await descontarStockDeItems(pedido.items, id, uid, batch);
       updates.stockDescontado = true;
@@ -275,7 +305,6 @@ exports.updateOrderStatus = async (req, res) => {
     const updates = { estado, updatedAt: new Date() };
     const batch = db.batch();
     
-    // Si el pedido no está registrado en caja y está pasando a un estado aceptado/activo
     if (!pedido.registradoEnCaja && ['preparando', 'listo', 'en_camino', 'entregado'].includes(estado)) {
       const { registrarVenta } = require('./cashController');
       try {
@@ -286,7 +315,6 @@ exports.updateOrderStatus = async (req, res) => {
       }
     }
     
-    // Si el stock no ha sido descontado y pasa a un estado aceptado/activo
     if (!pedido.stockDescontado && ['preparando', 'listo', 'en_camino', 'entregado'].includes(estado)) {
       await descontarStockDeItems(pedido.items, id, uid, batch);
       updates.stockDescontado = true;
@@ -310,7 +338,7 @@ exports.updateOrderStatus = async (req, res) => {
         } catch (err) {
           console.error(`[Timer Error] No se pudo entregar automáticamente el pedido #${id}:`, err);
         }
-      }, 5 * 60 * 1000); // 5 minutos (5 * 60 * 1000 ms)
+      }, 5 * 60 * 1000);
     }
 
     res.json({ mensaje: `Pedido ${id} actualizado a ${estado}` });
@@ -356,7 +384,7 @@ exports.createPublicOrder = async (req, res) => {
       return res.status(400).json({ mensaje: 'Nombre y teléfono son obligatorios' });
     }
 
-    const orderId = Date.now().toString();
+    const orderId = await generarNuevoOrderId();
 
     const pedido = {
       id: orderId,
@@ -429,7 +457,7 @@ exports.createCajaOrder = async (req, res) => {
       return res.status(403).json({ mensaje: 'No tenés permiso para crear pedidos desde caja' });
     }
 
-    const orderId = Date.now().toString();
+    const orderId = await generarNuevoOrderId();
 
     const pedido = {
       id: orderId,
@@ -457,7 +485,6 @@ exports.createCajaOrder = async (req, res) => {
 
     const batch = db.batch();
 
-    // Descontar stock inmediatamente para compras de mostrador
     await descontarStockDeItems(pedido.items, orderId, uid, batch);
 
     const pedidoRef = db.collection('pedidos').doc(orderId);

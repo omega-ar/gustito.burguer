@@ -11,34 +11,54 @@ let esPrimerCarga = true;
 let sonidoHabilitado = true;
 
 function reproducirSonidoNotificacion() {
-  const audio = new Audio('audio/iphone.mp3');
-  audio.play().catch(error => {
-    console.log('Audio file play failed or not found, synthesizing tone instead...');
-    sintetizarSonidoNotificacion();
-  });
-}
-
-function sintetizarSonidoNotificacion() {
   try {
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const playNote = (frequency, startTime, duration) => {
-      const osc = audioCtx.createOscillator();
-      const gainNode = audioCtx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(frequency, startTime);
-      gainNode.gain.setValueAtTime(0.15, startTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
-      osc.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
-      osc.start(startTime);
-      osc.stop(startTime + duration);
-    };
-    const now = audioCtx.currentTime;
-    playNote(1046.50, now, 0.12);      // C6
-    playNote(1318.51, now + 0.08, 0.12); // E6
-    playNote(1567.98, now + 0.16, 0.35); // G6
+    const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtxClass) return;
+    const ctx = new AudioCtxClass();
+
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(0.85, ctx.currentTime);
+    masterGain.connect(ctx.destination);
+
+    function emitirNota(freq, inicio, duracion) {
+      const osc1 = ctx.createOscillator();
+      const gain1 = ctx.createGain();
+      osc1.type = 'triangle';
+      osc1.frequency.setValueAtTime(freq, inicio);
+      gain1.gain.setValueAtTime(0.75, inicio);
+      gain1.gain.exponentialRampToValueAtTime(0.001, inicio + duracion);
+      osc1.connect(gain1);
+      gain1.connect(masterGain);
+
+      const osc2 = ctx.createOscillator();
+      const gain2 = ctx.createGain();
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(freq * 2, inicio);
+      gain2.gain.setValueAtTime(0.35, inicio);
+      gain2.gain.exponentialRampToValueAtTime(0.001, inicio + duracion * 0.75);
+      osc2.connect(gain2);
+      gain2.connect(masterGain);
+
+      osc1.start(inicio);
+      osc2.start(inicio);
+      osc1.stop(inicio + duracion);
+      osc2.stop(inicio + duracion);
+    }
+
+    const t = ctx.currentTime;
+    
+    emitirNota(784.00, t + 0.00, 0.20);
+    emitirNota(987.77, t + 0.12, 0.20);
+    emitirNota(1318.51, t + 0.24, 0.35);
+    emitirNota(1567.98, t + 0.36, 0.50);
+
+    emitirNota(784.00, t + 0.70, 0.20);
+    emitirNota(987.77, t + 0.82, 0.20);
+    emitirNota(1318.51, t + 0.94, 0.35);
+    emitirNota(1760.00, t + 1.06, 0.70);
+
   } catch (e) {
-    console.error('Failed to play synthesized sound:', e);
+    console.error('Error al reproducir alarma de pedido:', e);
   }
 }
 
@@ -84,11 +104,16 @@ async function imprimirComanda(pedido) {
     
     if (response.ok) {
       const data = await response.json();
-      const ventana = window.open('');
+      const ventana = window.open('', '_blank');
       ventana.document.write(data.html);
       ventana.document.close();
-      ventana.print();
-      ventana.close();
+      ventana.focus();
+      ventana.onafterprint = () => {
+        try { ventana.close(); } catch (e) {}
+      };
+      setTimeout(() => {
+        ventana.print();
+      }, 250);
       mostrarToast('Comanda enviada a impresión', 'success');
     } else {
       imprimirComandaLocal(pedido);
@@ -106,68 +131,122 @@ function imprimirComandaLocal(pedido) {
   }
   
   const fecha = new Date().toLocaleString('es-AR');
-  const itemsHTML = (pedido.items || []).map(item => `
-    <div style="display: flex; justify-content: space-between; margin: 2px 0;">
-      <span style="flex: 1;">${item.cantidad}x ${item.nombre}</span>
-      <span style="text-align: right; min-width: 60px;">$${(item.precio * item.cantidad).toLocaleString()}</span>
-    </div>
-  `).join('');
+  const itemsHTML = (pedido.items || []).map(item => {
+    const subtotal = (item.precio || 0) * (item.cantidad || 1);
+    return `
+      <div class="item-row">
+        <span class="item-nombre">${item.cantidad}x ${item.nombre}</span>
+        <span class="item-subtotal">$${subtotal.toLocaleString('es-AR')}</span>
+      </div>
+    `;
+  }).join('');
 
   const html = `
     <!DOCTYPE html>
     <html>
     <head>
       <meta charset="UTF-8">
+      <title>Comanda #${pedido.id}</title>
       <style>
         @page {
-          size: 80mm auto;
+          size: auto;
           margin: 0;
         }
-        body {
-          font-family: 'Courier New', monospace;
-          font-size: 12px;
-          width: 80mm;
-          margin: 0 auto;
-          padding: 12px 8px 8px 8px;
+        * {
           box-sizing: border-box;
-          line-height: 1.25;
+        }
+        body {
+          font-family: 'Courier New', Courier, monospace;
+          font-size: 12px;
+          color: #000;
+          width: 72mm;
+          max-width: 72mm;
+          margin: 0 auto;
+          padding: 6px 4px 20mm 4px;
+          line-height: 1.3;
+          background: #fff;
         }
         .header {
           text-align: center;
-          border-bottom: 1px dashed #000;
-          padding-bottom: 4px;
-          margin-bottom: 4px;
+          border-bottom: 2px dashed #000;
+          padding-bottom: 5px;
+          margin-bottom: 5px;
         }
         .header h2 {
-          font-size: 14px;
+          font-size: 15px;
+          font-weight: 900;
           margin: 0;
+          letter-spacing: 0.5px;
+        }
+        .header p {
+          font-size: 11px;
+          margin: 2px 0 0 0;
         }
         .info {
-          margin-bottom: 4px;
+          margin-bottom: 5px;
           border-bottom: 1px dashed #000;
-          padding-bottom: 4px;
+          padding-bottom: 5px;
+          font-size: 11px;
         }
         .info p {
-          margin: 1px 0;
+          margin: 2px 0;
         }
         .items {
-          margin-bottom: 4px;
-          border-bottom: 1px dashed #000;
-          padding-bottom: 4px;
+          margin-bottom: 6px;
+          border-bottom: 2px dashed #000;
+          padding-bottom: 5px;
+        }
+        .item-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: baseline;
+          margin: 3px 0;
+          padding-bottom: 2px;
+          border-bottom: 1px dotted #ccc;
+          font-size: 13px;
+          font-weight: bold;
+        }
+        .item-row:last-child {
+          border-bottom: none;
+        }
+        .item-nombre {
+          flex: 1;
+          padding-right: 6px;
+        }
+        .item-subtotal {
+          text-align: right;
+          white-space: nowrap;
+          font-weight: 900;
         }
         .total {
           display: flex;
           justify-content: space-between;
-          font-weight: bold;
-          font-size: 13px;
-          margin-top: 4px;
+          align-items: center;
+          font-weight: 900;
+          font-size: 15px;
+          margin: 8px 0;
+          padding: 6px 0;
+          border-top: 2px solid #000;
+          border-bottom: 2px solid #000;
+        }
+        .notas {
+          font-size: 11px;
+          margin: 4px 0;
+          padding: 3px;
+          background: #eee;
+          border-left: 2px solid #000;
         }
         .footer {
           text-align: center;
           margin-top: 6px;
           font-size: 11px;
-          border-top: 1px dashed #000;
           padding-top: 4px;
+        }
+        .paper-feed-spacer {
+          height: 25mm;
+          line-height: 25mm;
+          font-size: 1px;
+          color: transparent;
         }
       </style>
     </head>
@@ -178,7 +257,7 @@ function imprimirComandaLocal(pedido) {
       </div>
 
       <div class="info">
-        <p><strong>Pedido #${pedido.id}</strong></p>
+        <p><strong>Pedido: #${pedido.id}</strong></p>
         <p>Fecha: ${fecha}</p>
         <p>Cliente: ${pedido.cliente?.nombre || 'Mostrador'}</p>
         ${pedido.cliente?.telefono ? `<p>Tel: ${pedido.cliente.telefono}</p>` : ''}
@@ -194,25 +273,32 @@ function imprimirComandaLocal(pedido) {
       </div>
 
       <div class="total">
-        <span>TOTAL:</span>
-        <span>$${(pedido.total || 0).toLocaleString()}</span>
+        <span>TOTAL A PAGAR:</span>
+        <span>$${(pedido.total || 0).toLocaleString('es-AR')}</span>
       </div>
 
-      ${pedido.notas ? `<p style="margin: 4px 0 0 0;"><strong>Notas:</strong> ${pedido.notas}</p>` : ''}
+      ${pedido.notas ? `<div class="notas"><strong>Notas:</strong> ${pedido.notas}</div>` : ''}
 
       <div class="footer">
         <p>¡Gracias por elegirnos!</p>
         <p>Sánchez de Loria 633, CABA</p>
       </div>
+
+      <div class="paper-feed-spacer">.</div>
     </body>
     </html>
   `;
   
-  const ventana = window.open('');
+  const ventana = window.open('', '_blank');
   ventana.document.write(html);
   ventana.document.close();
-  ventana.print();
-  ventana.close();
+  ventana.focus();
+  ventana.onafterprint = () => {
+    try { ventana.close(); } catch (e) {}
+  };
+  setTimeout(() => {
+    ventana.print();
+  }, 250);
 }
 
 let cajaAbierta = false;
@@ -345,13 +431,12 @@ async function cargarProductosMenu() {
 
 function esElegibleDescuento(producto) {
   const ahora = new Date();
-  const fechaFin = new Date('2026-09-28T00:00:00-03:00'); // 30 días a partir del 28 de agosto de 2026
+  const fechaFin = new Date('2026-09-28T00:00:00-03:00');
   if (ahora > fechaFin) return false;
   
-  const esHamburguesa = ['simple', 'doble', 'triple', 'vegetariana'].includes(producto.categoria);
-  const esPapasCheddar = producto.id === 'papas_cheddar';
-  
-  return esHamburguesa || esPapasCheddar;
+  const esDoble = producto.categoria === 'doble' || producto.id === 'doble_vegetariana';
+  const esTriple = producto.categoria === 'triple' || producto.id === 'triple_vegetariana';
+  return esDoble || esTriple;
 }
 
 function mostrarSelectorProductos() {
@@ -385,9 +470,9 @@ function mostrarSelectorProductos() {
       
       let priceLabel = '';
       if (tieneDescuento) {
-        priceLabel = `<span style="text-decoration: line-through; opacity: 0.6; font-size: 0.8em; margin-right: 4px;">$${prod.precio.toLocaleString()}</span><b style="color: #2ed573;">$${precioFinal.toLocaleString()}</b> <span style="background-color: var(--primary-color, #ff6b00); color: white; padding: 1px 3px; border-radius: 3px; font-size: 0.65em; font-weight: bold; margin-left: 2px;">10% OFF</span>`;
+        priceLabel = `<span style="text-decoration: line-through; text-decoration-color: #ff4757; text-decoration-thickness: 1.5px; color: #888; font-weight: 600; font-size: 0.85em; margin-right: 4px;">$${prod.precio.toLocaleString('es-AR')}</span><b style="color: #2ed573; font-size: 1.05em; font-weight: 800;">$${precioFinal.toLocaleString('es-AR')}</b> <span style="background: linear-gradient(135deg, #ff4757, #ff6b00); color: white; padding: 1px 4px; border-radius: 4px; font-size: 0.65em; font-weight: 800; margin-left: 2px;">10% OFF</span>`;
       } else {
-        priceLabel = `$${prod.precio.toLocaleString()}`;
+        priceLabel = `<b style="font-size: 1em; font-weight: 700; color: inherit;">$${prod.precio.toLocaleString('es-AR')}</b>`;
       }
 
       html += `
@@ -448,9 +533,9 @@ function actualizarCarritoCajaUI() {
     
     let subtotalHTML = '';
     if (tieneDescuento && prodOriginal) {
-      subtotalHTML = `<span style="font-size: 0.8em; color: #a5a5a5; text-decoration: line-through; margin-right: 5px;">$${(prodOriginal.precio * item.cantidad).toLocaleString()}</span><strong style="color: var(--primary-color, #ff6b00);">$${subtotal.toLocaleString()}</strong>`;
+      subtotalHTML = `<span style="font-size: 0.85em; color: #888; text-decoration: line-through; text-decoration-color: #ff4757; text-decoration-thickness: 1.5px; margin-right: 6px; font-weight: 600;">$${((prodOriginal.precio || 0) * item.cantidad).toLocaleString('es-AR')}</span><strong style="color: var(--primary-color, #ff6b00); font-size: 1.05em; font-weight: 800;">$${subtotal.toLocaleString('es-AR')}</strong>`;
     } else {
-      subtotalHTML = `<span>$${subtotal.toLocaleString()}</span>`;
+      subtotalHTML = `<strong style="font-weight: 700;">$${subtotal.toLocaleString('es-AR')}</strong>`;
     }
     
     const div = document.createElement('div');
@@ -820,11 +905,15 @@ async function verComanda(pedidoId) {
   if (pedido.cliente?.referencia) lineas.push(`Ref: ${pedido.cliente.referencia}`);
   if (pedido.notas) lineas.push(`Notas: ${pedido.notas}`);
   lineas.push('--------------------------------');
-  for (const item of pedido.items) {
-    lineas.push(`${item.cantidad}x ${item.nombre}`);
+  for (const item of (pedido.items || [])) {
+    const subtotal = (item.precio || 0) * (item.cantidad || 1);
+    const itemText = `${item.cantidad}x ${item.nombre}`;
+    const priceText = `$${subtotal.toLocaleString('es-AR')}`;
+    const spaces = Math.max(2, 32 - itemText.length - priceText.length);
+    lineas.push(`${itemText}${' '.repeat(spaces)}${priceText}`);
   }
   lineas.push('--------------------------------');
-  lineas.push(`Total: $${pedido.total?.toLocaleString() || 0}`);
+  lineas.push(`TOTAL A PAGAR: $${(pedido.total || 0).toLocaleString('es-AR')}`);
   lineas.push('================================');
   lineas.push('¡Gracias por elegirnos!');
   

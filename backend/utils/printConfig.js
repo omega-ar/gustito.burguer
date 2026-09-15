@@ -5,66 +5,104 @@ const PRINT_CONFIG = {
     return `
       <style>
         @page {
-          size: ${this.paperWidth} auto;
+          size: auto;
           margin: 0;
         }
-        body {
-          font-family: 'Courier New', monospace;
-          font-size: 12px;
-          width: ${this.paperWidth === 'A4' ? '210mm' : this.paperWidth};
-          margin: 0 auto;
-          padding: 12px 8px 8px 8px;
+        * {
           box-sizing: border-box;
-          line-height: 1.25;
+        }
+        body {
+          font-family: 'Courier New', Courier, monospace;
+          font-size: 12px;
+          color: #000;
+          width: 72mm;
+          max-width: 72mm;
+          margin: 0 auto;
+          padding: 6px 4px 20mm 4px;
+          line-height: 1.3;
+          background: #fff;
         }
         .comanda-header {
           text-align: center;
-          border-bottom: 1px dashed #000;
-          padding-bottom: 4px;
-          margin-bottom: 4px;
+          border-bottom: 2px dashed #000;
+          padding-bottom: 5px;
+          margin-bottom: 5px;
         }
         .comanda-header h2 {
-          font-size: 14px;
+          font-size: 15px;
+          font-weight: 900;
           margin: 0;
+          letter-spacing: 0.5px;
+        }
+        .comanda-header p {
+          font-size: 11px;
+          margin: 2px 0 0 0;
         }
         .comanda-info {
-          margin-bottom: 4px;
+          margin-bottom: 5px;
           border-bottom: 1px dashed #000;
-          padding-bottom: 4px;
+          padding-bottom: 5px;
+          font-size: 11px;
         }
         .comanda-info p {
-          margin: 1px 0;
+          margin: 2px 0;
         }
         .comanda-items {
-          margin-bottom: 4px;
-          border-bottom: 1px dashed #000;
-          padding-bottom: 4px;
+          margin-bottom: 6px;
+          border-bottom: 2px dashed #000;
+          padding-bottom: 5px;
         }
         .item-row {
           display: flex;
           justify-content: space-between;
-          margin: 2px 0;
+          align-items: baseline;
+          margin: 3px 0;
+          padding-bottom: 2px;
+          border-bottom: 1px dotted #ccc;
+          font-size: 13px;
+          font-weight: bold;
+        }
+        .item-row:last-child {
+          border-bottom: none;
         }
         .item-nombre {
           flex: 1;
+          padding-right: 6px;
         }
-        .item-precio {
+        .item-subtotal {
           text-align: right;
-          min-width: 60px;
+          white-space: nowrap;
+          font-weight: 900;
         }
         .comanda-total {
           display: flex;
           justify-content: space-between;
-          font-weight: bold;
-          font-size: 13px;
-          margin-top: 4px;
+          align-items: center;
+          font-weight: 900;
+          font-size: 15px;
+          margin: 8px 0;
+          padding: 6px 0;
+          border-top: 2px solid #000;
+          border-bottom: 2px solid #000;
+        }
+        .comanda-notas {
+          font-size: 11px;
+          margin: 4px 0;
+          padding: 3px;
+          background: #eee;
+          border-left: 2px solid #000;
         }
         .comanda-footer {
           text-align: center;
           margin-top: 6px;
           font-size: 11px;
-          border-top: 1px dashed #000;
           padding-top: 4px;
+        }
+        .paper-feed-spacer {
+          height: 25mm;
+          line-height: 25mm;
+          font-size: 1px;
+          color: transparent;
         }
         .no-print {
           display: none;
@@ -75,18 +113,22 @@ const PRINT_CONFIG = {
 
   generateHTML: function(pedido) {
     const fecha = new Date().toLocaleString('es-AR');
-    const itemsHTML = pedido.items.map(item => `
-      <div class="item-row">
-        <span class="item-nombre">${item.cantidad}x ${item.nombre}</span>
-        <span class="item-precio">$${(item.precio * item.cantidad).toLocaleString()}</span>
-      </div>
-    `).join('');
+    const itemsHTML = (pedido.items || []).map(item => {
+      const subtotal = (item.precio || 0) * (item.cantidad || 1);
+      return `
+        <div class="item-row">
+          <span class="item-nombre">${item.cantidad}x ${item.nombre}</span>
+          <span class="item-subtotal">$${subtotal.toLocaleString('es-AR')}</span>
+        </div>
+      `;
+    }).join('');
 
     return `
       <!DOCTYPE html>
       <html>
       <head>
         <meta charset="UTF-8">
+        <title>Comanda #${pedido.id}</title>
         ${this.getStyles()}
       </head>
       <body>
@@ -96,7 +138,7 @@ const PRINT_CONFIG = {
         </div>
 
         <div class="comanda-info">
-          <p><strong>Pedido #${pedido.id}</strong></p>
+          <p><strong>Pedido: #${pedido.id}</strong></p>
           <p>Fecha: ${fecha}</p>
           <p>Cliente: ${pedido.cliente?.nombre || 'Mostrador'}</p>
           ${pedido.cliente?.telefono ? `<p>Tel: ${pedido.cliente.telefono}</p>` : ''}
@@ -112,16 +154,18 @@ const PRINT_CONFIG = {
         </div>
 
         <div class="comanda-total">
-          <span>TOTAL:</span>
-          <span>$${pedido.total?.toLocaleString()}</span>
+          <span>TOTAL A PAGAR:</span>
+          <span>$${(pedido.total || 0).toLocaleString('es-AR')}</span>
         </div>
 
-        ${pedido.notas ? `<p><strong>Notas:</strong> ${pedido.notas}</p>` : ''}
+        ${pedido.notas ? `<div class="comanda-notas"><strong>Notas:</strong> ${pedido.notas}</div>` : ''}
 
         <div class="comanda-footer">
           <p>¡Gracias por elegirnos!</p>
           <p>Sánchez de Loria 633, CABA</p>
         </div>
+
+        <div class="paper-feed-spacer">.</div>
       </body>
       </html>
     `;

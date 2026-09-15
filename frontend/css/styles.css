@@ -409,29 +409,6 @@ body.dark-mode .menu-section {
   justify-content: flex-end;
   padding: 1rem;
 }
-
-.precio-con-descuento {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 2px;
-}
-
-.precio-viejo {
-  font-size: 0.8rem;
-  color: #ffcccc;
-  text-decoration: line-through;
-}
-
-.precio-nuevo {
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: white;
-  background-color: var(--primary-color);
-  padding: 4px 12px;
-  border-radius: 20px;
-}
-
 .producto-info {
   padding: 1.5rem;
 }

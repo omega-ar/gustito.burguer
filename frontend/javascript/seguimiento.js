@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   cargarDatosPedido();
-  pollingInterval = setInterval(cargarDatosPedido, 10000); // Polling cada 10 segundos
+  pollingInterval = setInterval(cargarDatosPedido, 10000);
 });
 
 async function cargarDatosPedido() {

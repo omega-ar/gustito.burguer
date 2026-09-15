@@ -42,27 +42,6 @@ app.get('/', (req, res) => {
   });
 });
 
-app.get('/test-firestore', async (req, res) => {
-  try {
-    const testRef = db.collection('test').doc('conexion');
-    await testRef.set({
-      mensaje: 'Conexión exitosa a Firestore',
-      fecha: new Date()
-    });
-    
-    const doc = await testRef.get();
-    res.json({
-      success: true,
-      data: doc.data()
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
-  }
-});
-
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);

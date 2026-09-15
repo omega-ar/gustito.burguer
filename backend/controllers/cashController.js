@@ -15,6 +15,7 @@ exports.abrirCaja = async (req, res) => {
     }
 
     const turnoId = Date.now().toString();
+    const prefijoPedido = Math.floor(100000 + Math.random() * 900000).toString();
     const turno = {
       id: turnoId,
       cajeroId: uid,
@@ -24,7 +25,9 @@ exports.abrirCaja = async (req, res) => {
       ventasTurno: 0,
       apertura: new Date(),
       cerrado: false,
-      movimientos: []
+      movimientos: [],
+      prefijoPedido,
+      ultimoNumeroPedido: 0
     };
 
     await db.collection('caja').doc(turnoId).set(turno);

@@ -143,10 +143,9 @@ function esElegibleDescuento(producto) {
   const fechaFin = new Date('2026-09-28T00:00:00-03:00'); // 30 días a partir del 28 de agosto de 2026
   if (ahora > fechaFin) return false;
   
-  const esHamburguesa = ['simple', 'doble', 'triple', 'vegetariana'].includes(producto.categoria);
-  const esPapasCheddar = producto.id === 'papas_cheddar';
-  
-  return esHamburguesa || esPapasCheddar;
+  const esDoble = producto.categoria === 'doble' || producto.id === 'doble_vegetariana';
+  const esTriple = producto.categoria === 'triple' || producto.id === 'triple_vegetariana';
+  return esDoble || esTriple;
 }
 
 function mostrarProductosEnGrid(productos) {
@@ -187,23 +186,26 @@ function mostrarProductosEnGrid(productos) {
     const tieneDescuento = esElegibleDescuento(producto);
     const precioFinal = tieneDescuento ? Math.round(producto.precio * 0.9) : producto.precio;
     
-    const precioOriginalHTML = tieneDescuento 
-      ? `<span class="precio-viejo" style="text-decoration: line-through; opacity: 0.6; font-size: 0.85em; margin-right: 8px; color: var(--gray-color, #777); font-weight: normal;">$${producto.precio.toLocaleString()}</span>`
-      : '';
-    const badgeDescuentoHTML = tieneDescuento
-      ? `<span class="badge-descuento" style="background-color: var(--primary-color); color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.7em; font-weight: bold; margin-left: 5px; text-transform: uppercase;">10% OFF</span>`
-      : '';
+    const precioOverlayHTML = tieneDescuento
+      ? `
+        <div class="precio-container-descuento" style="background: rgba(18, 18, 18, 0.85); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 24px; padding: 5px 12px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);">
+          <span class="precio-original-card" style="text-decoration: line-through; text-decoration-color: #ff4757; text-decoration-thickness: 2px; color: #f0f0f0; font-weight: 700; font-size: 0.95rem; letter-spacing: 0.3px;">$${producto.precio.toLocaleString('es-AR')}</span>
+          <span class="precio-oferta-card" style="color: #ffffff; font-weight: 900; font-size: 1.25rem; text-shadow: 0 1px 4px rgba(0,0,0,0.5);">$${precioFinal.toLocaleString('es-AR')}</span>
+          <span class="badge-descuento-pill" style="background: linear-gradient(135deg, #ff4757, #ff6b00); color: #ffffff; padding: 2px 7px; border-radius: 12px; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 2px 5px rgba(255,71,87,0.3);">10% OFF</span>
+        </div>
+      `
+      : `
+        <div class="precio-container-normal" style="background: var(--primary-color, #ff6b00); border-radius: 20px; padding: 5px 14px; box-shadow: 0 4px 12px rgba(255, 107, 0, 0.4);">
+          <span class="precio-normal-card" style="color: #ffffff; font-weight: 800; font-size: 1.2rem;">$${producto.precio.toLocaleString('es-AR')}</span>
+        </div>
+      `;
 
     return `
       <div class="producto" data-category="${categoriaMap[producto.categoria]}">
         <div class="producto-img">
           <img src="img/${producto.imagen || 'default.png'}" alt="${producto.nombre}" onerror="this.src='img/default.png'">
           <div class="producto-overlay">
-            <span class="precio precio-con-descuento" style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap;">
-              ${precioOriginalHTML}
-              <span class="precio-nuevo">$${precioFinal.toLocaleString()}</span>
-              ${badgeDescuentoHTML}
-            </span>
+            ${precioOverlayHTML}
           </div>
         </div>
         <div class="producto-info">

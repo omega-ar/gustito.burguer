@@ -1,4 +1,4 @@
-const API_PEDIDO = window.API_URL || 'http://localhost:8080/api';
+const API_URL = window.API_URL || 'http://localhost:8080/api';
 
 let carrito = [];
 let creadoPedidoId = null;
@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   await cargarProductosOriginales();
   cargarCarrito();
   
-  // Si al cargar inicialmente el carrito está vacío, redirigir al menú
   if (carrito.length === 0) {
     alert('Tu carrito está vacío. Debes elegir al menos un producto primero.');
     window.location.href = 'index.html';
@@ -23,7 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function cargarProductosOriginales() {
   try {
-    const response = await fetch(`${API_PEDIDO}/products`);
+    const response = await fetch(`${API_URL}/products`);
     if (response.ok) {
       productosMenu = await response.json();
     }
@@ -37,10 +36,10 @@ function esElegibleDescuento(producto) {
   const fechaFin = new Date('2026-09-28T00:00:00-03:00'); // 30 días a partir del 28 de agosto de 2026
   if (ahora > fechaFin) return false;
   
-  const esHamburguesa = ['simple', 'doble', 'triple', 'vegetariana'].includes(producto.categoria);
-  const esPapasCheddar = producto.id === 'papas_cheddar';
-  
-  return esHamburguesa || esPapasCheddar;
+  // Descuento exclusivo para hamburguesas Dobles y Triples (incluye doble y triple vegetariana)
+  const esDoble = producto.categoria === 'doble' || producto.id === 'doble_vegetariana';
+  const esTriple = producto.categoria === 'triple' || producto.id === 'triple_vegetariana';
+  return esDoble || esTriple;
 }
 
 async function verificarEstadoLocal() {
@@ -49,7 +48,7 @@ async function verificarEstadoLocal() {
   if (!form) return;
   
   try {
-    const response = await fetch(`${API_PEDIDO}/orders/store-status`);
+    const response = await fetch(`${API_URL}/orders/store-status`);
     if (response.ok) {
       const data = await response.json();
       if (!data.open) {
@@ -143,7 +142,6 @@ function actualizarResumen() {
     return;
   }
   
-  // Habilitar campos si no está vacío
   if (form) {
     const inputs = form.querySelectorAll('input, select, textarea');
     inputs.forEach(input => input.disabled = false);
@@ -162,19 +160,18 @@ function actualizarResumen() {
     const subtotal = producto.precio * producto.cantidad;
     total += subtotal;
     
-    // Buscar precio original para ver si tenía descuento
     const prodOriginal = productosMenu.find(p => p.id === producto.id);
     const tieneDescuento = prodOriginal ? esElegibleDescuento(prodOriginal) : false;
     
     let priceDescHTML = '';
     if (tieneDescuento && prodOriginal) {
       priceDescHTML = `
-        <span class="precio-original-resumen" style="text-decoration: line-through; color: #a5a5a5; font-size: 0.85em; margin-right: 6px; font-weight: normal;">$${prodOriginal.precio.toLocaleString()}</span>
-        <span class="precio-descuento-resumen" style="color: var(--primary-color, #ff6b00); font-weight: 800; font-size: 1.05rem;">$${producto.precio.toLocaleString()} <span style="font-size: 0.8em; font-weight: normal; color: #666;">c/u</span></span>
-        <span class="badge-descuento-ticket" style="background-color: rgba(255, 107, 0, 0.12); color: var(--primary-color, #ff6b00); padding: 2px 8px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; margin-left: 8px; border: 1px solid rgba(255, 107, 0, 0.25); display: inline-block;">10% OFF</span>
+        <span class="precio-original-resumen" style="text-decoration: line-through; text-decoration-color: #ff4757; text-decoration-thickness: 1.5px; color: #777; font-size: 0.9rem; margin-right: 8px; font-weight: 600;">$${(prodOriginal.precio || 0).toLocaleString('es-AR')}</span>
+        <span class="precio-descuento-resumen" style="color: var(--primary-color, #ff6b00); font-weight: 800; font-size: 1.1rem;">$${producto.precio.toLocaleString('es-AR')} <span style="font-size: 0.8em; font-weight: normal; color: #555;">c/u</span></span>
+        <span class="badge-descuento-ticket" style="background: linear-gradient(135deg, #ff4757, #ff6b00); color: white; padding: 2px 8px; border-radius: 20px; font-size: 0.72rem; font-weight: 800; margin-left: 8px; box-shadow: 0 2px 5px rgba(255,71,87,0.3); display: inline-block;">10% OFF</span>
       `;
     } else {
-      priceDescHTML = `<span class="precio-normal-resumen" style="font-weight: 700; color: #444; font-size: 0.95rem;">$${producto.precio.toLocaleString()} <span style="font-size: 0.8em; font-weight: normal; color: #666;">c/u</span></span>`;
+      priceDescHTML = `<span class="precio-normal-resumen" style="font-weight: 700; color: #333; font-size: 0.95rem;">$${producto.precio.toLocaleString('es-AR')} <span style="font-size: 0.8em; font-weight: normal; color: #666;">c/u</span></span>`;
     }
     
     const item = document.createElement('div');
@@ -205,7 +202,6 @@ function actualizarResumen() {
   
   if (totalSpan) totalSpan.textContent = total.toLocaleString();
   
-  // Agregar eventos a botones de cantidad y borrado
   resumenContainer.querySelectorAll('.btn-minus').forEach(btn => {
     btn.addEventListener('click', () => cambiarCantidad(btn.dataset.id, -1));
   });
@@ -269,7 +265,7 @@ async function enviarPedido(e) {
   };
   
   try {
-    const response = await fetch(`${API_PEDIDO}/orders/public`, {
+    const response = await fetch(`${API_URL}/orders/public`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(pedidoData)
