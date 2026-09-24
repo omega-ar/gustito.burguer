@@ -149,7 +149,7 @@ function imprimirComandaLocal(pedido) {
       <title>Comanda #${pedido.id}</title>
       <style>
         @page {
-          size: auto;
+          size: 80mm auto;
           margin: 0;
         }
         * {
@@ -159,10 +159,10 @@ function imprimirComandaLocal(pedido) {
           font-family: 'Courier New', Courier, monospace;
           font-size: 12px;
           color: #000;
-          width: 72mm;
-          max-width: 72mm;
-          margin: 0 auto;
-          padding: 6px 4px 20mm 4px;
+          width: 80mm;
+          max-width: 100%;
+          margin: 0;
+          padding: 4px;
           line-height: 1.3;
           background: #fff;
         }

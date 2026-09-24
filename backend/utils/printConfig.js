@@ -5,7 +5,7 @@ const PRINT_CONFIG = {
     return `
       <style>
         @page {
-          size: auto;
+          size: ${this.paperWidth} auto;
           margin: 0;
         }
         * {
@@ -15,10 +15,10 @@ const PRINT_CONFIG = {
           font-family: 'Courier New', Courier, monospace;
           font-size: 12px;
           color: #000;
-          width: 72mm;
-          max-width: 72mm;
-          margin: 0 auto;
-          padding: 6px 4px 20mm 4px;
+          width: ${this.paperWidth === 'A4' ? '210mm' : this.paperWidth};
+          max-width: 100%;
+          margin: 0;
+          padding: 4px;
           line-height: 1.3;
           background: #fff;
         }
