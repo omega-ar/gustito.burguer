@@ -159,10 +159,10 @@ function imprimirComandaLocal(pedido) {
           font-family: 'Courier New', Courier, monospace;
           font-size: 12px;
           color: #000;
-          width: 80mm;
-          max-width: 100%;
+          width: 67mm;
+          max-width: 67mm;
           margin: 0;
-          padding: 4px;
+          padding: 2px 4px;
           line-height: 1.3;
           background: #fff;
         }

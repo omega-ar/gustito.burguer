@@ -1,5 +1,6 @@
 const PRINT_CONFIG = {
   paperWidth: '80mm',
+  printableWidth: '67mm',
   
   getStyles: function() {
     return `
@@ -15,10 +16,10 @@ const PRINT_CONFIG = {
           font-family: 'Courier New', Courier, monospace;
           font-size: 12px;
           color: #000;
-          width: ${this.paperWidth === 'A4' ? '210mm' : this.paperWidth};
-          max-width: 100%;
+          width: ${this.printableWidth};
+          max-width: ${this.printableWidth};
           margin: 0;
-          padding: 4px;
+          padding: 2px 4px;
           line-height: 1.3;
           background: #fff;
         }
