@@ -430,12 +430,18 @@ async function cargarProductosMenu() {
 }
 
 function esElegibleDescuento(producto) {
+  if (!producto) return false;
   const ahora = new Date();
-  const fechaFin = new Date('2026-09-28T00:00:00-03:00');
-  if (ahora > fechaFin) return false;
+  const fechaInicio = new Date('2026-10-01T00:00:00-03:00');
+  const fechaFin = new Date('2026-11-01T00:00:00-03:00'); // Todo el mes de octubre
+  if (ahora < fechaInicio || ahora >= fechaFin) {
+    const mes = ahora.getMonth();
+    const anio = ahora.getFullYear();
+    if (anio !== 2026 || mes !== 9) return false;
+  }
   
-  const esDoble = producto.categoria === 'doble' || producto.id === 'doble_vegetariana';
-  const esTriple = producto.categoria === 'triple' || producto.id === 'triple_vegetariana';
+  const esDoble = producto.categoria === 'doble' || producto.id === 'doble_vegetariana' || (typeof producto.nombre === 'string' && producto.nombre.toLowerCase().includes('doble') && producto.categoria !== 'promo');
+  const esTriple = producto.categoria === 'triple' || producto.id === 'triple_vegetariana' || (typeof producto.nombre === 'string' && producto.nombre.toLowerCase().includes('triple') && producto.categoria !== 'promo');
   return esDoble || esTriple;
 }
 
@@ -533,7 +539,7 @@ function actualizarCarritoCajaUI() {
     
     let subtotalHTML = '';
     if (tieneDescuento && prodOriginal) {
-      subtotalHTML = `<span style="font-size: 0.85em; color: #888; text-decoration: line-through; text-decoration-color: #ff4757; text-decoration-thickness: 1.5px; margin-right: 6px; font-weight: 600;">$${((prodOriginal.precio || 0) * item.cantidad).toLocaleString('es-AR')}</span><strong style="color: var(--primary-color, #ff6b00); font-size: 1.05em; font-weight: 800;">$${subtotal.toLocaleString('es-AR')}</strong>`;
+      subtotalHTML = `<span style="font-size: 0.85em; color: #888; text-decoration: line-through; text-decoration-color: #ff4757; text-decoration-thickness: 1.5px; margin-right: 6px; font-weight: 600;">$${((prodOriginal.precio || 0) * item.cantidad).toLocaleString('es-AR')}</span><strong style="color: var(--primary-color, #ff6b00); font-size: 1.05em; font-weight: 800;">$${subtotal.toLocaleString('es-AR')}</strong> <span style="background: linear-gradient(135deg, #ff4757, #ff6b00); color: white; padding: 1px 5px; border-radius: 4px; font-size: 0.65em; font-weight: 800; margin-left: 2px;">10% OFF</span>`;
     } else {
       subtotalHTML = `<strong style="font-weight: 700;">$${subtotal.toLocaleString('es-AR')}</strong>`;
     }

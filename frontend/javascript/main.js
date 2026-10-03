@@ -139,12 +139,18 @@ function mostrarPromosEnGrid(productos) {
 }
 
 function esElegibleDescuento(producto) {
+  if (!producto) return false;
   const ahora = new Date();
-  const fechaFin = new Date('2026-09-28T00:00:00-03:00'); // 30 días a partir del 28 de agosto de 2026
-  if (ahora > fechaFin) return false;
+  const fechaInicio = new Date('2026-10-01T00:00:00-03:00');
+  const fechaFin = new Date('2026-11-01T00:00:00-03:00'); // Todo el mes de octubre
+  if (ahora < fechaInicio || ahora >= fechaFin) {
+    const mes = ahora.getMonth();
+    const anio = ahora.getFullYear();
+    if (anio !== 2026 || mes !== 9) return false;
+  }
   
-  const esDoble = producto.categoria === 'doble' || producto.id === 'doble_vegetariana';
-  const esTriple = producto.categoria === 'triple' || producto.id === 'triple_vegetariana';
+  const esDoble = producto.categoria === 'doble' || producto.id === 'doble_vegetariana' || (typeof producto.nombre === 'string' && producto.nombre.toLowerCase().includes('doble') && producto.categoria !== 'promo');
+  const esTriple = producto.categoria === 'triple' || producto.id === 'triple_vegetariana' || (typeof producto.nombre === 'string' && producto.nombre.toLowerCase().includes('triple') && producto.categoria !== 'promo');
   return esDoble || esTriple;
 }
 

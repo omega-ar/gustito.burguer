@@ -358,7 +358,6 @@
   }
 }
 
-/* Estilos para el ticket de resumen con controles */
 .resumen-productos {
   display: flex;
   flex-direction: column;
@@ -509,7 +508,6 @@ body.dark-mode .qty-val {
   color: var(--primary-color);
 }
 
-/* Ayudas de formulario */
 .form-help-text {
   display: block;
   font-size: 0.8rem;
@@ -521,7 +519,6 @@ body.dark-mode .qty-val {
   margin-right: 4px;
 }
 
-/* Botón Explorar Menú */
 .btn-explorar-menu {
   display: inline-flex;
   align-items: center;
