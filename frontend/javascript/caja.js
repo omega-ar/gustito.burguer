@@ -476,15 +476,15 @@ function mostrarSelectorProductos() {
       
       let priceLabel = '';
       if (tieneDescuento) {
-        priceLabel = `<span style="text-decoration: line-through; text-decoration-color: #ff4757; text-decoration-thickness: 1.5px; color: #888; font-weight: 600; font-size: 0.85em; margin-right: 4px;">$${prod.precio.toLocaleString('es-AR')}</span><b style="color: #2ed573; font-size: 1.05em; font-weight: 800;">$${precioFinal.toLocaleString('es-AR')}</b> <span style="background: linear-gradient(135deg, #ff4757, #ff6b00); color: white; padding: 1px 4px; border-radius: 4px; font-size: 0.65em; font-weight: 800; margin-left: 2px;">10% OFF</span>`;
+        priceLabel = `<span class="prod-caja-orig" style="text-decoration: line-through; text-decoration-color: #ff4757; color: #888; font-weight: 600; font-size: 0.85rem; margin-right: 4px;">$${prod.precio.toLocaleString('es-AR')}</span><b class="prod-caja-final" style="color: #2ed573; font-size: 1rem; font-weight: 800;">$${precioFinal.toLocaleString('es-AR')}</b>`;
       } else {
-        priceLabel = `<b style="font-size: 1em; font-weight: 700; color: inherit;">$${prod.precio.toLocaleString('es-AR')}</b>`;
+        priceLabel = `<b class="prod-caja-final" style="font-size: 1rem; font-weight: 700; color: inherit;">$${prod.precio.toLocaleString('es-AR')}</b>`;
       }
 
       html += `
         <button class="btn-producto-caja" data-id="${prod.id}" data-nombre="${prod.nombre}" data-precio="${precioFinal}">
-          ${prod.nombre}<br>
-          <small>${priceLabel}</small>
+          <span class="btn-prod-nombre">${prod.nombre}</span>
+          <span class="btn-prod-precio">${priceLabel}</span>
         </button>
       `;
     }
@@ -539,9 +539,9 @@ function actualizarCarritoCajaUI() {
     
     let subtotalHTML = '';
     if (tieneDescuento && prodOriginal) {
-      subtotalHTML = `<span style="font-size: 0.85em; color: #888; text-decoration: line-through; text-decoration-color: #ff4757; text-decoration-thickness: 1.5px; margin-right: 6px; font-weight: 600;">$${((prodOriginal.precio || 0) * item.cantidad).toLocaleString('es-AR')}</span><strong style="color: var(--primary-color, #ff6b00); font-size: 1.05em; font-weight: 800;">$${subtotal.toLocaleString('es-AR')}</strong> <span style="background: linear-gradient(135deg, #ff4757, #ff6b00); color: white; padding: 1px 5px; border-radius: 4px; font-size: 0.65em; font-weight: 800; margin-left: 2px;">10% OFF</span>`;
+      subtotalHTML = `<span style="font-size: 0.9rem; color: #888; text-decoration: line-through; text-decoration-color: #ff4757; margin-right: 6px; font-weight: 600;">$${((prodOriginal.precio || 0) * item.cantidad).toLocaleString('es-AR')}</span><strong style="color: var(--primary-color, #ff6b00); font-size: 1.05rem; font-weight: 800;">$${subtotal.toLocaleString('es-AR')}</strong>`;
     } else {
-      subtotalHTML = `<strong style="font-weight: 700;">$${subtotal.toLocaleString('es-AR')}</strong>`;
+      subtotalHTML = `<strong style="font-size: 1rem; font-weight: 700;">$${subtotal.toLocaleString('es-AR')}</strong>`;
     }
     
     const div = document.createElement('div');

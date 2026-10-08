@@ -358,11 +358,16 @@
   background: #f5f5f5;
   border: 1px solid #ddd;
   border-radius: 8px;
-  padding: 0.5rem;
+  padding: 0.6rem 0.5rem;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s;
-  font-size: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  min-height: 62px;
 }
 
 .btn-producto-caja:hover {
@@ -371,9 +376,27 @@
   border-color: var(--primary-color);
 }
 
-.btn-producto-caja small {
-  display: block;
-  font-weight: bold;
+.btn-producto-caja:hover .prod-caja-orig {
+  color: #f0f0f0 !important;
+  opacity: 0.85;
+}
+
+.btn-producto-caja:hover .prod-caja-final {
+  color: #ffffff !important;
+}
+
+.btn-prod-nombre {
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.btn-prod-precio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex-wrap: wrap;
 }
 
 .carrito-caja {
