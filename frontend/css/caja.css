@@ -104,7 +104,7 @@
   display: inline-block;
   padding: 0.3rem 1rem;
   border-radius: 20px;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 600;
   margin-bottom: 1rem;
 }
@@ -210,7 +210,7 @@
 }
 
 .pedido-status {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   padding: 0.2rem 0.6rem;
   border-radius: 12px;
 }
@@ -240,7 +240,7 @@
 }
 
 .pedido-item {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   padding: 0.2rem 0;
 }
 
@@ -284,7 +284,7 @@
   padding: 1rem;
   border-radius: 8px;
   font-family: monospace;
-  font-size: 12px;
+  font-size: 0.9rem;
   white-space: pre-wrap;
   margin: 1rem 0;
   max-height: 400px;
@@ -386,7 +386,7 @@
 }
 
 .btn-prod-nombre {
-  font-size: 0.88rem;
+  font-size: 0.9rem;
   font-weight: 600;
   line-height: 1.2;
 }
@@ -429,7 +429,7 @@
   width: 24px;
   height: 24px;
   cursor: pointer;
-  font-size: 0.7rem;
+  font-size: 0.9rem;
 }
 
 .carrito-total-caja {

@@ -124,7 +124,7 @@ function mostrarPromosEnGrid(productos) {
         <p>${promo.descripcion || 'Combo especial de hamburguesas'}</p>
         <div class="promo-footer">
           <span class="promo-price">$${promo.precio.toLocaleString()}</span>
-          <button class="btn-agregar btn-promo-agregar" data-id="${promo.id}" data-nombre="${promo.nombre}" data-precio="${promo.precio}">
+          <button class="btn-agregar btn-promo-agregar" data-id="${promo.id}" data-nombre="${promo.nombre}" data-precio="${promo.precio}" data-promo="1">
             Agregar al Pedido
           </button>
         </div>
@@ -136,22 +136,6 @@ function mostrarPromosEnGrid(productos) {
     btn.removeEventListener('click', handleAgregarClick);
     btn.addEventListener('click', handleAgregarClick);
   });
-}
-
-function esElegibleDescuento(producto) {
-  if (!producto) return false;
-  const ahora = new Date();
-  const fechaInicio = new Date('2026-10-01T00:00:00-03:00');
-  const fechaFin = new Date('2026-11-01T00:00:00-03:00'); // Todo el mes de octubre
-  if (ahora < fechaInicio || ahora >= fechaFin) {
-    const mes = ahora.getMonth();
-    const anio = ahora.getFullYear();
-    if (anio !== 2026 || mes !== 9) return false;
-  }
-  
-  const esDoble = producto.categoria === 'doble' || producto.id === 'doble_vegetariana' || (typeof producto.nombre === 'string' && producto.nombre.toLowerCase().includes('doble') && producto.categoria !== 'promo');
-  const esTriple = producto.categoria === 'triple' || producto.id === 'triple_vegetariana' || (typeof producto.nombre === 'string' && producto.nombre.toLowerCase().includes('triple') && producto.categoria !== 'promo');
-  return esDoble || esTriple;
 }
 
 function mostrarProductosEnGrid(productos) {
@@ -189,15 +173,15 @@ function mostrarProductosEnGrid(productos) {
   productosMostrar.sort((a, b) => a.precio - b.precio);
   
   menuGrid.innerHTML = productosMostrar.map(producto => {
-    const tieneDescuento = esElegibleDescuento(producto);
-    const precioFinal = tieneDescuento ? Math.round(producto.precio * 0.9) : producto.precio;
+    const descuento = GustitoPromos.descuentoProducto(producto);
+    const tieneDescuento = descuento > 0;
+    const precioFinal = GustitoPromos.precioFinalProducto(producto);
     
     const precioOverlayHTML = tieneDescuento
       ? `
         <div class="precio-container-descuento" style="background: rgba(18, 18, 18, 0.85); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 24px; padding: 5px 12px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);">
           <span class="precio-original-card" style="text-decoration: line-through; text-decoration-color: #ff4757; text-decoration-thickness: 2px; color: #f0f0f0; font-weight: 700; font-size: 0.95rem; letter-spacing: 0.3px;">$${producto.precio.toLocaleString('es-AR')}</span>
           <span class="precio-oferta-card" style="color: #ffffff; font-weight: 900; font-size: 1.25rem; text-shadow: 0 1px 4px rgba(0,0,0,0.5);">$${precioFinal.toLocaleString('es-AR')}</span>
-          <span class="badge-descuento-pill" style="background: linear-gradient(135deg, #ff4757, #ff6b00); color: #ffffff; padding: 2px 7px; border-radius: 12px; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 2px 5px rgba(255,71,87,0.3);">10% OFF</span>
         </div>
       `
       : `
@@ -234,13 +218,21 @@ function mostrarProductosEnGrid(productos) {
   filtrarProductos(activeCategory);
 }
 
-function handleAgregarClick(e) {
+async function handleAgregarClick(e) {
   const btn = e.currentTarget;
   const nombre = btn.getAttribute('data-nombre');
   const precio = parseInt(btn.getAttribute('data-precio'));
   const id = btn.getAttribute('data-id');
   
-  agregarAlCarrito({ id, nombre, precio, cantidad: 1 });
+  const item = { id, nombre, precio, cantidad: 1 };
+  if (btn.getAttribute('data-promo') === '1') {
+    const promo = productos.find(p => p.id === id);
+    const gaseosas = await GustitoPromos.pedirGaseosas(promo || { nombre, gaseosas: 1 });
+    if (!gaseosas) return;
+    item.gaseosas = gaseosas;
+  }
+  agregarAlCarrito(item);
+
   
   const textoOriginal = btn.textContent;
   btn.textContent = '¡Agregado!';
@@ -318,7 +310,7 @@ function filtrarProductos(categoria) {
 }
 
 function agregarAlCarrito(producto) {
-  const existente = carrito.find(item => item.id === producto.id);
+  const existente = carrito.find(item => GustitoPromos.claveItem(item) === GustitoPromos.claveItem(producto));
   if (existente) {
     existente.cantidad += 1;
   } else {
@@ -348,7 +340,8 @@ function actualizarCarrito() {
         total += subtotal;
         const div = document.createElement('div');
         div.className = 'cart-item';
-        div.innerHTML = `<span>${item.nombre} x${item.cantidad}</span><span>$${subtotal.toLocaleString()}</span>`;
+        const gas = GustitoPromos.resumenGaseosas(item.gaseosas);
+        div.innerHTML = `<span>${item.nombre} x${item.cantidad}${gas ? `<br><small>🥤 ${gas}</small>` : ''}</span><span>$${subtotal.toLocaleString()}</span>`;
         cartItems.appendChild(div);
       });
       if (previewTotal) previewTotal.textContent = total.toLocaleString();

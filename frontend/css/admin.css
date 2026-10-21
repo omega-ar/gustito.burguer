@@ -140,7 +140,7 @@
   color: white;
   padding: 0.2rem 0.6rem;
   border-radius: 12px;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
 }
 
 .badge-success {
@@ -148,7 +148,7 @@
   color: white;
   padding: 0.2rem 0.6rem;
   border-radius: 12px;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
 }
 
 .btn-editar {
@@ -206,7 +206,7 @@
 
 .alerta-info p {
   margin: 0;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: #666;
 }
 
@@ -245,7 +245,7 @@
 
 .stat-label {
   display: block;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: #666;
 }
 

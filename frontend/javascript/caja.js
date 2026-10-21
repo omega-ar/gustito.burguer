@@ -429,22 +429,6 @@ async function cargarProductosMenu() {
   }
 }
 
-function esElegibleDescuento(producto) {
-  if (!producto) return false;
-  const ahora = new Date();
-  const fechaInicio = new Date('2026-10-01T00:00:00-03:00');
-  const fechaFin = new Date('2026-11-01T00:00:00-03:00'); // Todo el mes de octubre
-  if (ahora < fechaInicio || ahora >= fechaFin) {
-    const mes = ahora.getMonth();
-    const anio = ahora.getFullYear();
-    if (anio !== 2026 || mes !== 9) return false;
-  }
-  
-  const esDoble = producto.categoria === 'doble' || producto.id === 'doble_vegetariana' || (typeof producto.nombre === 'string' && producto.nombre.toLowerCase().includes('doble') && producto.categoria !== 'promo');
-  const esTriple = producto.categoria === 'triple' || producto.id === 'triple_vegetariana' || (typeof producto.nombre === 'string' && producto.nombre.toLowerCase().includes('triple') && producto.categoria !== 'promo');
-  return esDoble || esTriple;
-}
-
 function mostrarSelectorProductos() {
   const container = document.getElementById('selectorProductos');
   if (!container) return;
@@ -471,19 +455,21 @@ function mostrarSelectorProductos() {
               <div class="productos-mini-grid">`;
     
     for (const prod of productosCat) {
-      const tieneDescuento = esElegibleDescuento(prod);
-      const precioFinal = tieneDescuento ? Math.round(prod.precio * 0.9) : prod.precio;
+      const descuento = GustitoPromos.descuentoProducto(prod);
+      const tieneDescuento = descuento > 0;
+      const precioFinal = GustitoPromos.precioFinalProducto(prod);
       
       let priceLabel = '';
       if (tieneDescuento) {
-        priceLabel = `<span class="prod-caja-orig" style="text-decoration: line-through; text-decoration-color: #ff4757; color: #888; font-weight: 600; font-size: 0.85rem; margin-right: 4px;">$${prod.precio.toLocaleString('es-AR')}</span><b class="prod-caja-final" style="color: #2ed573; font-size: 1rem; font-weight: 800;">$${precioFinal.toLocaleString('es-AR')}</b>`;
+        priceLabel = `<span class="prod-caja-orig" style="text-decoration: line-through; text-decoration-color: #ff4757; color: #888; font-weight: 600; font-size: 0.9rem; margin-right: 4px;">$${prod.precio.toLocaleString('es-AR')}</span><b class="prod-caja-final" style="color: #2ed573; font-size: 1rem; font-weight: 800;">$${precioFinal.toLocaleString('es-AR')}</b>`;
       } else {
         priceLabel = `<b class="prod-caja-final" style="font-size: 1rem; font-weight: 700; color: inherit;">$${prod.precio.toLocaleString('es-AR')}</b>`;
       }
 
       html += `
-        <button class="btn-producto-caja" data-id="${prod.id}" data-nombre="${prod.nombre}" data-precio="${precioFinal}">
+        <button class="btn-producto-caja" data-id="${prod.id}" data-nombre="${prod.nombre}" data-precio="${precioFinal}" ${GustitoPromos.esPromo(prod) ? 'data-promo="1"' : ''}>
           <span class="btn-prod-nombre">${prod.nombre}</span>
+          ${GustitoPromos.esPromo(prod) ? `<span class="btn-prod-detalle">${prod.descripcion || ''}</span>` : ''}
           <span class="btn-prod-precio">${priceLabel}</span>
         </button>
       `;
@@ -496,17 +482,24 @@ function mostrarSelectorProductos() {
   container.innerHTML = html;
   
   document.querySelectorAll('.btn-producto-caja').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', async () => {
       const id = btn.dataset.id;
       const nombre = btn.dataset.nombre;
       const precio = parseInt(btn.dataset.precio);
-      agregarAlCarritoCaja({ id, nombre, precio, cantidad: 1 });
+      const item = { id, nombre, precio, cantidad: 1 };
+      if (btn.dataset.promo === '1') {
+        const promo = productosMenu.find(p => p.id === id);
+        const gaseosas = await GustitoPromos.pedirGaseosas(promo || { nombre, gaseosas: 1 });
+        if (!gaseosas) return;
+        item.gaseosas = gaseosas;
+      }
+      agregarAlCarritoCaja(item);
     });
   });
 }
 
 function agregarAlCarritoCaja(producto) {
-  const existente = carritoCaja.find(item => item.id === producto.id);
+  const existente = carritoCaja.find(item => GustitoPromos.claveItem(item) === GustitoPromos.claveItem(producto));
   if (existente) {
     existente.cantidad += 1;
   } else {
@@ -535,7 +528,12 @@ function actualizarCarritoCajaUI() {
     total += subtotal;
     
     const prodOriginal = productosMenu.find(p => p.id === item.id);
-    const tieneDescuento = prodOriginal ? esElegibleDescuento(prodOriginal) : false;
+    const descuentoUnit = prodOriginal ? GustitoPromos.descuentoProducto(prodOriginal) : 0;
+    const tieneDescuento = descuentoUnit > 0;
+    const gasTexto = GustitoPromos.resumenGaseosas(item.gaseosas);
+    const detalleHTML = prodOriginal && GustitoPromos.esPromo(prodOriginal)
+      ? `<small class="carrito-item-detalle">${prodOriginal.descripcion || ''}${gasTexto ? `<br>🥤 ${gasTexto}` : ''}</small>`
+      : '';
     
     let subtotalHTML = '';
     if (tieneDescuento && prodOriginal) {
@@ -547,7 +545,7 @@ function actualizarCarritoCajaUI() {
     const div = document.createElement('div');
     div.className = 'carrito-item-caja';
     div.innerHTML = `
-      <span>${item.nombre} x${item.cantidad}</span>
+      <span>${item.nombre} x${item.cantidad}${detalleHTML}</span>
       <span>${subtotalHTML}</span>
       <button class="btn-remover-caja" data-index="${idx}"><i class="fas fa-trash-alt"></i></button>
     `;
@@ -587,7 +585,8 @@ async function enviarPedidoCaja() {
     producto_id: item.id,
     nombre: item.nombre,
     cantidad: item.cantidad,
-    precio: item.precio
+    precio: item.precio,
+    gaseosas: item.gaseosas || []
   }));
   
   const btn = document.getElementById('btnEnviarPedidoCaja');
@@ -722,7 +721,7 @@ function mostrarPedidosPendientes() {
         ${pedido.cliente?.telefono ? `<span><i class="fas fa-phone"></i> ${pedido.cliente.telefono}</span>` : ''}
       </div>
       <div class="pedido-items">
-        ${(pedido.items || []).map(item => `<div class="pedido-item">${item.cantidad}x ${item.nombre}</div>`).join('')}
+        ${(pedido.items || []).map(item => `<div class="pedido-item">${item.cantidad}x ${item.nombre}${item.detalle ? `<small class="pedido-item-detalle">${item.detalle}</small>` : ''}${(item.gaseosas && item.gaseosas.length) ? `<small class="pedido-item-detalle">🥤 ${GustitoPromos.resumenGaseosas(item.gaseosas)}</small>` : ''}</div>`).join('')}
       </div>
       <div class="pedido-total">
         <strong>Total: $${(pedido.total || 0).toLocaleString()}</strong>
@@ -781,7 +780,7 @@ function mostrarPedidosListos() {
         <strong><i class="fas fa-user"></i> ${pedido.cliente?.nombre || 'Mostrador'}</strong>
       </div>
       <div class="pedido-items">
-        ${(pedido.items || []).map(item => `<div class="pedido-item">${item.cantidad}x ${item.nombre}</div>`).join('')}
+        ${(pedido.items || []).map(item => `<div class="pedido-item">${item.cantidad}x ${item.nombre}${item.detalle ? `<small class="pedido-item-detalle">${item.detalle}</small>` : ''}${(item.gaseosas && item.gaseosas.length) ? `<small class="pedido-item-detalle">🥤 ${GustitoPromos.resumenGaseosas(item.gaseosas)}</small>` : ''}</div>`).join('')}
       </div>
       <div class="pedido-total">
         <strong>Total: $${(pedido.total || 0).toLocaleString()}</strong>
@@ -874,7 +873,7 @@ function mostrarHistorial(pedidos, fecha) {
             <strong>${pedido.cliente?.nombre || 'Mostrador'}</strong>
           </div>
           <div class="pedido-items">
-            ${(pedido.items || []).map(item => `<div class="pedido-item">${item.cantidad}x ${item.nombre}</div>`).join('')}
+            ${(pedido.items || []).map(item => `<div class="pedido-item">${item.cantidad}x ${item.nombre}${item.detalle ? `<small class="pedido-item-detalle">${item.detalle}</small>` : ''}${(item.gaseosas && item.gaseosas.length) ? `<small class="pedido-item-detalle">🥤 ${GustitoPromos.resumenGaseosas(item.gaseosas)}</small>` : ''}</div>`).join('')}
           </div>
           <div class="pedido-total">
             <strong>$${pedido.total?.toLocaleString()}</strong>

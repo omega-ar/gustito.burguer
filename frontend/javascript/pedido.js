@@ -31,22 +31,6 @@ async function cargarProductosOriginales() {
   }
 }
 
-function esElegibleDescuento(producto) {
-  if (!producto) return false;
-  const ahora = new Date();
-  const fechaInicio = new Date('2026-10-01T00:00:00-03:00');
-  const fechaFin = new Date('2026-11-01T00:00:00-03:00'); // Todo el mes de octubre
-  if (ahora < fechaInicio || ahora >= fechaFin) {
-    const mes = ahora.getMonth();
-    const anio = ahora.getFullYear();
-    if (anio !== 2026 || mes !== 9) return false;
-  }
-  
-  const esDoble = producto.categoria === 'doble' || producto.id === 'doble_vegetariana' || (typeof producto.nombre === 'string' && producto.nombre.toLowerCase().includes('doble') && producto.categoria !== 'promo');
-  const esTriple = producto.categoria === 'triple' || producto.id === 'triple_vegetariana' || (typeof producto.nombre === 'string' && producto.nombre.toLowerCase().includes('triple') && producto.categoria !== 'promo');
-  return esDoble || esTriple;
-}
-
 async function verificarEstadoLocal() {
   const btn = document.getElementById('btnEnviarPedido');
   const form = document.getElementById('formPedido');
@@ -88,7 +72,7 @@ function cargarCarrito() {
 }
 
 function cambiarCantidad(id, delta) {
-  const index = carrito.findIndex(item => item.id === id);
+  const index = carrito.findIndex(item => GustitoPromos.claveItem(item) === id);
   if (index !== -1) {
     carrito[index].cantidad += delta;
     if (carrito[index].cantidad <= 0) {
@@ -100,7 +84,7 @@ function cambiarCantidad(id, delta) {
 }
 
 function eliminarItem(id) {
-  const index = carrito.findIndex(item => item.id === id);
+  const index = carrito.findIndex(item => GustitoPromos.claveItem(item) === id);
   if (index !== -1) {
     carrito.splice(index, 1);
     guardarCarrito();
@@ -161,49 +145,67 @@ function actualizarResumen() {
     }
   }
   
+  let ahorroTotal = 0;
+  const fmt = (n) => n.toLocaleString('es-AR');
+
   carrito.forEach(producto => {
+    const prodOriginal = productosMenu.find(p => p.id === producto.id);
+    // El precio siempre se toma del menú actual (así el descuento se aplica aunque el carrito sea viejo)
+    if (prodOriginal) producto.precio = GustitoPromos.precioFinalProducto(prodOriginal);
+
     const subtotal = producto.precio * producto.cantidad;
     total += subtotal;
-    
-    const prodOriginal = productosMenu.find(p => p.id === producto.id);
-    const tieneDescuento = prodOriginal ? esElegibleDescuento(prodOriginal) : false;
-    
-    let priceDescHTML = '';
-    if (tieneDescuento && prodOriginal) {
-      priceDescHTML = `
-        <span class="precio-original-resumen" style="text-decoration: line-through; text-decoration-color: #ff4757; text-decoration-thickness: 1.5px; color: #777; font-size: 0.9rem; margin-right: 8px; font-weight: 600;">$${(prodOriginal.precio || 0).toLocaleString('es-AR')}</span>
-        <span class="precio-descuento-resumen" style="color: var(--primary-color, #ff6b00); font-weight: 800; font-size: 1.1rem;">$${producto.precio.toLocaleString('es-AR')} <span style="font-size: 0.8em; font-weight: normal; color: #555;">c/u</span></span>
-        <span class="badge-descuento-ticket" style="background: linear-gradient(135deg, #ff4757, #ff6b00); color: white; padding: 2px 8px; border-radius: 20px; font-size: 0.72rem; font-weight: 800; margin-left: 8px; box-shadow: 0 2px 5px rgba(255,71,87,0.3); display: inline-block;">10% OFF</span>
-      `;
-    } else {
-      priceDescHTML = `<span class="precio-normal-resumen" style="font-weight: 700; color: #333; font-size: 0.95rem;">$${producto.precio.toLocaleString('es-AR')} <span style="font-size: 0.8em; font-weight: normal; color: #666;">c/u</span></span>`;
+
+    const descuento = prodOriginal ? GustitoPromos.descuentoProducto(prodOriginal) : 0;
+    ahorroTotal += descuento * producto.cantidad;
+    const esPromo = prodOriginal && GustitoPromos.esPromo(prodOriginal);
+
+    let detalleHTML = '';
+    if (esPromo) {
+      const partes = (prodOriginal.descripcion || '').split('+').map(t => t.trim()).filter(Boolean);
+      const gasTexto = GustitoPromos.resumenGaseosas(producto.gaseosas);
+      detalleHTML = `<ul class="ticket-detalle">
+        ${partes.map(t => t.toLowerCase().includes('gaseosa')
+          ? `<li>🥤 ${gasTexto ? 'Gaseosa: <strong>' + gasTexto + '</strong>' : t}</li>`
+          : `<li>${t}</li>`).join('')}
+      </ul>`;
     }
-    
+
+    const precioHTML = descuento > 0
+      ? `<span class="precio-original-resumen">$${fmt(prodOriginal.precio)}</span>
+         <span class="precio-descuento-resumen">$${fmt(producto.precio)} c/u</span>`
+      : `<span class="precio-normal-resumen">$${fmt(producto.precio)} c/u</span>`;
+
+    const clave = GustitoPromos.claveItem(producto);
     const item = document.createElement('div');
     item.className = 'ticket-item';
     item.innerHTML = `
       <div class="ticket-item-row1">
         <span class="ticket-item-name">${producto.nombre}</span>
-        <span class="ticket-item-subtotal">$${subtotal.toLocaleString()}</span>
+        <span class="ticket-item-subtotal">$${fmt(subtotal)}</span>
       </div>
+      ${detalleHTML}
+      <div class="ticket-item-price-desc">${precioHTML}</div>
       <div class="ticket-item-row2">
-        <div class="ticket-item-price-desc">
-          ${priceDescHTML}
+        <div class="qty-controls">
+          <button type="button" class="qty-btn btn-minus" data-id="${clave}" aria-label="Quitar uno">−</button>
+          <span class="qty-val">${producto.cantidad}</span>
+          <button type="button" class="qty-btn btn-plus" data-id="${clave}" aria-label="Agregar uno">+</button>
         </div>
-        <div class="ticket-item-actions">
-          <div class="qty-controls">
-            <button type="button" class="qty-btn btn-minus" data-id="${producto.id}">-</button>
-            <span class="qty-val">${producto.cantidad}</span>
-            <button type="button" class="qty-btn btn-plus" data-id="${producto.id}">+</button>
-          </div>
-          <button type="button" class="btn-delete-item" data-id="${producto.id}" title="Eliminar del pedido">
-            <i class="fas fa-trash-alt"></i>
-          </button>
-        </div>
+        <button type="button" class="btn-delete-item" data-id="${clave}" title="Eliminar del pedido">
+          <i class="fas fa-trash-alt"></i>
+        </button>
       </div>
     `;
     resumenContainer.appendChild(item);
   });
+
+  if (ahorroTotal > 0) {
+    const ahorro = document.createElement('div');
+    ahorro.className = 'ticket-ahorro';
+    ahorro.innerHTML = `<i class="fas fa-tag"></i> Estás ahorrando <strong>$${fmt(ahorroTotal)}</strong>`;
+    resumenContainer.appendChild(ahorro);
+  }
   
   if (totalSpan) totalSpan.textContent = total.toLocaleString();
   
@@ -251,7 +253,8 @@ async function enviarPedido(e) {
     producto_id: item.id || item.nombre.toLowerCase().replace(/ /g, '_').normalize("NFD").replace(/[\u0300-\u036f]/g, ""),
     nombre: item.nombre,
     cantidad: item.cantidad,
-    precio: item.precio
+    precio: item.precio,
+    gaseosas: item.gaseosas || []
   }));
   
   const total = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);

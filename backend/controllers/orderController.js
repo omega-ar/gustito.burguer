@@ -90,6 +90,45 @@ async function generarNuevoOrderId() {
   return `${fallbackPrefijo}01`;
 }
 
+const GASEOSAS_VALIDAS = ['Coca Cola', 'Fanta', 'Sprite'];
+
+/**
+ * Recalcula precios en el servidor (no se confía en los precios del cliente).
+ * Precio final = precio - descuento fijo. Agrega detalle y gaseosas elegidas en promos.
+ */
+async function normalizarItems(items) {
+  const resultado = [];
+  let total = 0;
+  for (const item of items) {
+    const snap = await db.collection('productos').doc(item.producto_id).get();
+    if (!snap.exists || snap.data().activo === false) {
+      const err = new Error(`Producto no disponible: ${item.nombre || item.producto_id}`);
+      err.status = 400;
+      throw err;
+    }
+    const prod = snap.data();
+    const cantidad = Math.max(1, parseInt(item.cantidad, 10) || 1);
+    let descuento = prod.descuento || 0;
+    if (!descuento && prod.categoria !== 'promo') {
+      const pid = String(item.producto_id);
+      if (prod.categoria === 'triple' || pid.startsWith('triple_')) descuento = 2000;
+      else if (prod.categoria === 'doble' || pid.startsWith('doble_')) descuento = 1000;
+    }
+    const precio = prod.categoria === 'promo' ? prod.precio : prod.precio - descuento;
+    const nuevo = { producto_id: item.producto_id, nombre: prod.nombre, cantidad, precio };
+    if (prod.categoria === 'promo') {
+      const cuantas = prod.gaseosas || 1;
+      let gaseosas = Array.isArray(item.gaseosas) ? item.gaseosas.filter(g => GASEOSAS_VALIDAS.includes(g)) : [];
+      while (gaseosas.length < cuantas) gaseosas.push(GASEOSAS_VALIDAS[0]);
+      nuevo.gaseosas = gaseosas.slice(0, cuantas);
+      nuevo.detalle = prod.descripcion || '';
+    }
+    total += precio * cantidad;
+    resultado.push(nuevo);
+  }
+  return { items: resultado, total };
+}
+
 function generarComanda(pedido) {
   const fecha = new Date().toLocaleString();
   const lineas = [];
@@ -107,6 +146,8 @@ function generarComanda(pedido) {
     const nombre = item.nombre.padEnd(25, ' ');
     const precio = `$${item.precio * item.cantidad}`.padStart(10, ' ');
     lineas.push(`${item.cantidad}x ${nombre} ${precio}`);
+    if (item.detalle) lineas.push(`   ${item.detalle}`);
+    if (item.gaseosas && item.gaseosas.length) lineas.push(`   Gaseosa: ${item.gaseosas.join(' + ')}`);
   }
   
   lineas.push('--------------------------------');
@@ -384,6 +425,8 @@ exports.createPublicOrder = async (req, res) => {
       return res.status(400).json({ mensaje: 'Nombre y teléfono son obligatorios' });
     }
 
+    const normalizado = await normalizarItems(items);
+
     const orderId = await generarNuevoOrderId();
 
     const pedido = {
@@ -394,13 +437,8 @@ exports.createPublicOrder = async (req, res) => {
         direccion: cliente.direccion || '',
         referencia: cliente.referencia || ''
       },
-      items: items.map(item => ({
-        producto_id: item.producto_id,
-        nombre: item.nombre,
-        cantidad: item.cantidad,
-        precio: item.precio
-      })),
-      total,
+      items: normalizado.items,
+      total: normalizado.total,
       notas: notas || '',
       metodoPago: metodoPago || 'efectivo',
       estado: 'pendiente',
@@ -416,6 +454,7 @@ exports.createPublicOrder = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
+    if (error.status === 400) return res.status(400).json({ mensaje: error.message });
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
@@ -457,6 +496,8 @@ exports.createCajaOrder = async (req, res) => {
       return res.status(403).json({ mensaje: 'No tenés permiso para crear pedidos desde caja' });
     }
 
+    const normalizado = await normalizarItems(items);
+
     const orderId = await generarNuevoOrderId();
 
     const pedido = {
@@ -467,13 +508,8 @@ exports.createCajaOrder = async (req, res) => {
         telefono: cliente?.telefono || '',
         direccion: cliente?.direccion || 'Mostrador'
       },
-      items: items.map(item => ({
-        producto_id: item.producto_id,
-        nombre: item.nombre,
-        cantidad: item.cantidad,
-        precio: item.precio
-      })),
-      total,
+      items: normalizado.items,
+      total: normalizado.total,
       notas: notas || '',
       metodoPago: metodoPago || 'efectivo',
       estado: 'pendiente',
@@ -507,6 +543,7 @@ exports.createCajaOrder = async (req, res) => {
 
   } catch (error) {
     console.error(error);
+    if (error.status === 400) return res.status(400).json({ mensaje: error.message });
     res.status(500).json({ error: error.message });
   }
 };

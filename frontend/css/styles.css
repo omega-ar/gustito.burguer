@@ -116,7 +116,7 @@ header .container {
 }
 
 .logo p {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   opacity: 0.8;
 }
 
@@ -203,7 +203,7 @@ nav ul li a:hover {
   backdrop-filter: blur(10px);
   padding: 0.3rem 1rem;
   border-radius: 30px;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   margin-bottom: 1.5rem;
   border: 1px solid rgba(255,107,0,0.5);
 }
@@ -257,7 +257,7 @@ nav ul li a:hover {
 }
 
 .stat-label {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   opacity: 0.8;
 }
 
@@ -315,7 +315,7 @@ body.dark-mode .menu-section {
   color: var(--primary-color);
   padding: 0.3rem 1rem;
   border-radius: 30px;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: 600;
   margin-bottom: 1rem;
 }
@@ -600,7 +600,7 @@ body.dark-mode .menu-section {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   font-weight: 700;
 }
 
@@ -642,7 +642,7 @@ body.dark-mode .menu-section {
   display: flex;
   justify-content: space-between;
   margin-bottom: 0.5rem;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
 }
 
 .cart-total {
@@ -662,7 +662,7 @@ body.dark-mode .menu-section {
   color: white;
   padding: 0.75rem 1.5rem;
   border-radius: 40px;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   z-index: 1100;
   opacity: 0;
   visibility: hidden;
@@ -873,7 +873,7 @@ body.dark-mode .menu-section {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: #666;
 }
 
@@ -967,7 +967,7 @@ body.dark-mode .promo-card {
   color: white;
   padding: 0.5rem 1.2rem;
   border-radius: 50px;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: 800;
   letter-spacing: 1px;
   z-index: 10;
@@ -1049,5 +1049,168 @@ body.dark-mode .promo-footer {
   .promos-grid {
     grid-template-columns: 1fr;
     gap: 2rem;
+  }
+}
+
+/* ==========================================================
+   Tipografía unificada y responsive (menú, pedido, caja, seguimiento)
+   Mínimo legible: 0.9rem (~14.4px) en todo el sitio.
+   ========================================================== */
+:root {
+  --fs-min: 0.9rem;
+  --fs-sm: 0.95rem;
+  --fs-base: 1rem;
+  --fs-lg: 1.15rem;
+}
+
+html {
+  font-size: clamp(15px, 0.9vw + 12px, 17px);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-size: var(--fs-base);
+}
+
+input,
+select,
+textarea,
+button {
+  font-family: inherit;
+  font-size: max(var(--fs-base), 16px); /* evita zoom automático en iOS */
+}
+
+small,
+label,
+th,
+td {
+  font-size: max(var(--fs-min), 0.9em);
+}
+
+@media (max-width: 480px) {
+  html { font-size: 16px; }
+  button,
+  .btn-agregar,
+  .qty-btn,
+  .btn-producto-caja {
+    min-height: 44px;
+  }
+}
+
+/* ---------- Detalle de promos (menú, pedido y caja) ---------- */
+.ticket-item-detalle,
+.carrito-item-detalle,
+.pedido-item-detalle,
+.btn-prod-detalle {
+  display: block;
+  font-size: var(--fs-min);
+  line-height: 1.4;
+  opacity: 0.85;
+  font-weight: 500;
+  white-space: normal;
+}
+
+.btn-prod-detalle {
+  margin-top: 4px;
+  font-style: italic;
+}
+
+/* ---------- Modal de elección de gaseosa ---------- */
+.gaseosa-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 10000;
+  animation: gustitoFade 0.2s ease;
+}
+
+.gaseosa-modal {
+  background: #fff;
+  color: #1a1a1a;
+  width: min(420px, 100%);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  animation: gustitoPop 0.25s ease;
+}
+
+.gaseosa-modal h3 { font-size: var(--fs-lg); margin-bottom: 0.4rem; }
+.gaseosa-detalle { font-size: var(--fs-sm); color: #555; margin-bottom: 1rem; }
+.gaseosa-label { display: block; font-weight: 600; margin-bottom: 0.8rem; }
+.gaseosa-select {
+  width: 100%;
+  margin-top: 0.3rem;
+  padding: 0.7rem;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  background: #fff;
+  color: #1a1a1a;
+}
+.gaseosa-actions { display: flex; gap: 0.6rem; margin-top: 1rem; }
+.gaseosa-actions button {
+  flex: 1;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 44px;
+}
+.gaseosa-cancel { background: #e9ecef; color: #333; }
+.gaseosa-ok { background: var(--primary-color); color: #fff; }
+
+/* ---------- Animaciones de la página principal ---------- */
+@keyframes gustitoFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes gustitoPop { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
+@keyframes gustitoUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes gustitoFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes gustitoPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 107, 0, 0.55); }
+  50% { box-shadow: 0 0 0 12px rgba(255, 107, 0, 0); }
+}
+@keyframes gustitoShine { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+@keyframes gustitoBg { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+
+.hero-background { animation: gustitoBg 18s ease-in-out infinite; }
+.hero-content > * { animation: gustitoUp 0.8s ease backwards; }
+.hero-content > *:nth-child(1) { animation-delay: 0.1s; }
+.hero-content > *:nth-child(2) { animation-delay: 0.25s; }
+.hero-content > *:nth-child(3) { animation-delay: 0.4s; }
+.hero-content > *:nth-child(4) { animation-delay: 0.55s; }
+.hero-content > *:nth-child(5) { animation-delay: 0.7s; }
+.hero-badge { animation: gustitoUp 0.8s ease backwards, gustitoPulse 2.4s ease-in-out 1s infinite; }
+.logo-img { transition: transform 0.4s ease; }
+.logo:hover .logo-img { transform: rotate(-6deg) scale(1.08); }
+.hero-stats > * { animation: gustitoFloat 4s ease-in-out infinite; }
+.hero-stats > *:nth-child(2) { animation-delay: 0.6s; }
+.hero-stats > *:nth-child(3) { animation-delay: 1.2s; }
+
+.promo-card,
+.producto { animation: gustitoUp 0.6s ease backwards; }
+.promo-card:nth-child(2), .producto:nth-child(2) { animation-delay: 0.08s; }
+.promo-card:nth-child(3), .producto:nth-child(3) { animation-delay: 0.16s; }
+.promo-card:nth-child(4), .producto:nth-child(4) { animation-delay: 0.24s; }
+.promo-card:nth-child(5), .producto:nth-child(5) { animation-delay: 0.32s; }
+.promo-card:nth-child(6), .producto:nth-child(6) { animation-delay: 0.4s; }
+.promo-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+.promo-card:hover { transform: translateY(-8px); box-shadow: 0 16px 32px rgba(255, 107, 0, 0.25); }
+.promo-badge { animation: gustitoPulse 2.4s ease-in-out infinite; }
+.promo-card .btn-agregar,
+.hero-buttons a {
+  background-image: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.35) 50%, transparent 70%);
+  background-size: 200% 100%;
+}
+.promo-card .btn-agregar:hover,
+.hero-buttons a:hover { animation: gustitoShine 1.2s linear; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
 }

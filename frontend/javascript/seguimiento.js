@@ -82,7 +82,8 @@ function actualizarInterfaz(pedido) {
   if (itemsContainer && pedido.items) {
     itemsContainer.innerHTML = pedido.items.map(item => `
       <div class="resumen-item" style="display: flex; justify-content: space-between; margin-bottom: 0.6rem; font-size: 0.95rem;">
-        <span>${item.nombre} x${item.cantidad}</span>
+        <span>${item.nombre} x${item.cantidad}${item.detalle ? `<br><small>${item.detalle}</small>` : ''}${(item.gaseosas && item.gaseosas.length) ? `<br><small>🥤 ${item.gaseosas.join(' + ')}</small>` : ''}</span>
+
         <span style="font-weight: 600;">$${(item.precio * item.cantidad).toLocaleString()}</span>
       </div>
     `).join('');
